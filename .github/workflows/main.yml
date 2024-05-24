@@ -23,7 +23,7 @@ jobs:
     - name: Extract issue number from comments
       id: extract_issue
       run: |
-        ISSUE_NUMBER=$(jq -r '.[] | select(.body | test("Fixes #\\d+")) | .body' comments.json | grep -oP '(?<=Fixes #)\d+')
+        ISSUE_NUMBER=$(jq -r '.[] | select(.body | test("Fixes #\\d+")) | .body' comments.json | grep -oP '(?<=close #)\d+')
         echo "::set-output name=issue_number::$ISSUE_NUMBER"
 
     - name: Close related issue in main repo

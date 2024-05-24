@@ -1,0 +1,110 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+
+# RuboCopの基本設定
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  # 警告メッセージにCop名を表示する
+  DisplayCopNames: true
+  SuggestExtensions: false
+
+########################
+# Line columns
+########################
+
+# 行の長さを160文字以内に制限する
+Layout/LineLength:
+  Max: 160
+
+########################
+# Numbers
+########################
+
+# 長い数字にアンダースコアを使用して3桁ごとに区切る
+Style/NumericLiterals:
+  MinDigits: 7
+  Strict: true
+
+########################
+# Arrays
+########################
+
+# 単語の配列には%wまたは%W記法を使用する
+Style/WordArray:
+  EnforcedStyle: percent
+
+########################
+# Hashes
+########################
+
+# ハッシュリテラルの中括弧内にスペースを入れる
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: space
+
+########################
+# Assignments
+#######################
+
+# 代入式を条件文に使用しない
+Lint/AssignmentInCondition:
+  Enabled: true
+  AllowSafeAssignment: false
+
+########################
+# Control structures
+########################
+
+# トップレベルのドキュメントコメントはなし
+Style/Documentation:
+  Enabled: false
+
+# 否定条件のif文の代わりにunlessを使用する
+Style/NegatedIf:
+  Enabled: true
+
+# 否定条件のwhile文の代わりにuntilを使用する
+Style/NegatedWhile:
+  Enabled: true
+
+# unless文でelseを使用しない
+Style/UnlessElse:
+  Enabled: true
+
+# if、unless、caseの条件句にthenや:を使用しない
+Style/WhenThen:
+  Enabled: true
+
+# while、untilの条件句にdoや:を使用しない
+Style/WhileUntilDo:
+  Enabled: true
+
+# 短い条件と本体の時は修飾子形式を使用する
+Style/WhileUntilModifier:
+  Enabled: true
+
+########################
+# Comments
+########################
+
+# 日本語のコメントを許容する
+Style/AsciiComments:
+  Enabled: false
+
+########################
+# Metrics
+########################
+
+# メソッドの長さを20行まで許容し、コメント行はカウントしない
+Metrics/MethodLength:
+  CountComments: false
+  Max: 20
+  Exclude:
+    - test/**/*
+
+# ブロックの行数制限をテストファイルにはしない。
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+    - test/**/*

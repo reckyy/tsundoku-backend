@@ -23,14 +23,27 @@ jobs:
     - name: Extract issue number from comments
       id: extract_issue
       run: |
-        ISSUE_NUMBER=$(jq -r '.[] | select(.body | test("Fixes #\\d+")) | .body' comments.json | grep -oP '(?<=close #)\d+')
-        echo "::set-output name=issue_number::$ISSUE_NUMBER"
+        ISSUE_NUMBER=$(jq -r '.[] | select(.body | test("close #\\d+")) | .body' comments.json | grep -oP '(?<=close #)\d+')
+        echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
 
-    - name: Close related issue in main repo
-      if: steps.extract_issue.outputs.issue_number != ''
+    - name: Add PR URL comment to issue
+      if: env.issue_number != ''
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ISSUE_NUMBER: ${{ steps.extract_issue.outputs.issue_number }}
+        ISSUE_NUMBER: ${{ env.issue_number }}
+        PR_URL: ${{ github.event.pull_request.html_url }}
+      run: |
+        curl -X POST \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/reckyy/tsundoku/issues/$ISSUE_NUMBER/comments \
+          -d "{\"body\": \"[PRのURL]($PR_URL)\"}"
+
+    - name: Close related issue in main repo
+      if: env.issue_number != ''
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ISSUE_NUMBER: ${{ env.issue_number }}
       run: |
         curl -X PATCH \
           -H "Authorization: token $GITHUB_TOKEN" \

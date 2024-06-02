@@ -7,7 +7,7 @@ module Api
       if user
         head :ok
       else
-        render json: {error: 'ログインに失敗しました' }, status: unprocessable_entity
+        render json: { error: 'ログインに失敗しました' }, status: unprocessable_entity
       end
     rescue StandardError => e
       render json: { error: e.message }, status: :internal_server_error

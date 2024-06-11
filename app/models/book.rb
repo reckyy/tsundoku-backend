@@ -6,4 +6,6 @@ class Book < ApplicationRecord
     validates :author
     validates :cover_image_url
   end
+
+  has_many :user_books, dependent: :destroy
 end

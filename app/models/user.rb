@@ -6,4 +6,6 @@ class User < ApplicationRecord
     validates :email, uniqueness: true
     validates :avatar_url
   end
+
+  has_many :user_books, dependent: :destroy
 end

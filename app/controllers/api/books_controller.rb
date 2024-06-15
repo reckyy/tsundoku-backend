@@ -21,7 +21,7 @@ module Api
 
     def create_user_book(book, email)
       user = User.find_by(email:)
-      user.books << book
+      UserBook.new(user:, book:)
     end
   end
 end

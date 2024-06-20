@@ -2,6 +2,11 @@
 
 module Api
   class BooksController < ApplicationController
+    def index
+      user = User.find_by(email: params[:email])
+      render json: user.nil? ? [] : user.books
+    end
+
     def create
       book = Book.find_or_create_by!(book_params)
       if book && create_user_book(book, params[:email])

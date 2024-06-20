@@ -4,7 +4,7 @@ module Api
   class BooksController < ApplicationController
     def index
       user = User.find_by(email: params[:email])
-      render json: user.books
+      render json: user.nil? ? [] : user.books
     end
 
     def create

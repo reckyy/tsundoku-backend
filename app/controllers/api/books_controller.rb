@@ -26,7 +26,7 @@ module Api
 
     def create_user_book(book, email)
       user = User.find_by(email:)
-      UserBook.new(user:, book:)
+      UserBook.find_or_create_by!(user:, book:)
     end
   end
 end

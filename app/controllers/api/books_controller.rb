@@ -26,7 +26,13 @@ module Api
 
     def create_user_book(book, email)
       user = User.find_by(email:)
-      UserBook.find_or_create_by!(user:, book:)
+      user_book = UserBook.find_or_create_by!(user:, book:)
+      heading_number = params[:heading_number].to_i
+      insert_chapter(user_book, heading_number).rows.size == heading_number
+    end
+
+    def insert_chapter(user_book, heading_number)
+      user_book.headings.insert_all((1..heading_number).map { |n| { number: n } }) # rubocop:disable Rails/SkipsModelValidations 特にvalidationはないため
     end
   end
 end

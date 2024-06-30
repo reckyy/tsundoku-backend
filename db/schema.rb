@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_10_125927) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_30_024222) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_125927) do
     t.string "cover_image_url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "headings", force: :cascade do |t|
+    t.integer "number"
+    t.string "title"
+    t.bigint "user_book_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_book_id"], name: "index_headings_on_user_book_id"
   end
 
   create_table "user_books", force: :cascade do |t|
@@ -41,6 +50,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_125927) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "headings", "user_books"
   add_foreign_key "user_books", "books"
   add_foreign_key "user_books", "users"
 end

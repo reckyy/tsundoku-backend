@@ -28,7 +28,7 @@ RSpec.describe 'Api::Books', type: :request do
   describe 'Api::BooksController#create' do
     context 'params is valid' do
       it 'return a successful response' do
-        book_params = { book: { title: 'テスト本のタイトル', author: 'テスト本の著者', cover_image_url: 'http://localhost:3000/testcoverimageurl' }, email: @user.email }
+        book_params = { book: { title: 'テスト本のタイトル', author: 'テスト本の著者', cover_image_url: 'http://localhost:3000/testcoverimageurl' }, email: @user.email, heading_number: 5 }
         post api_books_path, params: book_params
         expect(response).to have_http_status(:ok)
       end

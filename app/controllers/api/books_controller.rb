@@ -27,7 +27,9 @@ module Api
     def create_user_book(book, email)
       user = User.find_by(email:)
       user_book = UserBook.find_or_create_by!(user:, book:)
-      heading_number = params[:heading_number].to_i
+      heading_number = params[:heading_number]&.to_i
+      return false if heading_number.nil?
+
       insert_chapter(user_book, heading_number).rows.size == heading_number
     end
 

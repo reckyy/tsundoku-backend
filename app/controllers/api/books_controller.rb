@@ -4,7 +4,27 @@ module Api
   class BooksController < ApplicationController
     def index
       user = User.find_by(email: params[:email])
-      render json: user.nil? ? [] : user.books
+      if user.nil?
+        render json: []
+      else
+        user_books_with_headings = user.user_books.includes(:book, :headings).map do |user_book|
+          {
+            book: {
+              id: user_book.book.id,
+              title: user_book.book.title,
+              author: user_book.book.author,
+              cover_image_url: user_book.book.cover_image_url
+            },
+            headings: user_book.headings.map do |heading|
+              {
+                number: heading.number,
+                title: heading.title
+              }
+            end
+          }
+        end
+        render json: user_books_with_headings
+      end
     end
 
     def create

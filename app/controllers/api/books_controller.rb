@@ -17,8 +17,13 @@ module Api
             },
             headings: user_book.headings.map do |heading|
               {
+                id: heading.id,
                 number: heading.number,
-                title: heading.title
+                title: heading.title,
+                memo: {
+                  id: heading.memo.id,
+                  body: heading.memo.body
+                }
               }
             end
           }
@@ -50,11 +55,14 @@ module Api
       heading_number = params[:heading_number]&.to_i
       return false if heading_number.nil?
 
-      insert_chapter(user_book, heading_number).rows.size == heading_number
+      insert_chapter(user_book, heading_number)
     end
 
     def insert_chapter(user_book, heading_number)
-      user_book.headings.insert_all((1..heading_number).map { |n| { number: n } }) # rubocop:disable Rails/SkipsModelValidations 特にvalidationはないため
+      (1..heading_number).map do |n|
+        user_book.headings.create!(number: n, title: "Chapter #{n}", memo_attributes: {})
+      end
+      true
     end
   end
 end

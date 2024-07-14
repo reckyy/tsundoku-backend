@@ -21,7 +21,7 @@ module Api
     private
 
     def book_params
-      params.require(:book).permit(:title, :author, :cover_image_url)
+      params.permit(:title, :author, :cover_image_url)
     end
 
     def create_user_book(book, email)

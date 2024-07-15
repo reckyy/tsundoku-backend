@@ -7,7 +7,7 @@ module Api
       if user
         head :ok
       else
-        render json: { error: 'ログインに失敗しました' }, status: unprocessable_entity
+        render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
       end
     rescue StandardError => e
       render json: { error: e.message }, status: :internal_server_error
@@ -16,7 +16,7 @@ module Api
     private
 
     def user_params
-      params.require(:user).permit(:name, :email, :avatar_url)
+      params.permit(:name, :email, :avatar_url, :uid)
     end
   end
 end

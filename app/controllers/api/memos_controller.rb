@@ -2,10 +2,10 @@
 
 module Api
   class MemosController < ApplicationController
-    before_action :set_user, only: [:index]
+    before_action :authenticate, only: [:index]
 
     def index
-      user_book = UserBook.find_by(user: @user, book_id: params[:book_id])
+      user_book = UserBook.find_by(user: current_user, book_id: params[:book_id])
       book_with_memos = build_book_with_memos(user_book)
       render json: book_with_memos
     end
@@ -15,7 +15,7 @@ module Api
       if memo.update(memo_params)
         head :ok
       else
-        render json: { error: 'メモの登録に失敗しました' }, status: unprocessable_entity
+        render json: { error: 'メモの登録に失敗しました' }, status: :unprocessable_entity
       end
     rescue StandardError => e
       Rails.logger.error(e)
@@ -23,10 +23,6 @@ module Api
     end
 
     private
-
-    def set_user
-      @user = User.find_by(email: params[:email])
-    end
 
     def memo_params
       params.require(:memo).permit(:id, :body)

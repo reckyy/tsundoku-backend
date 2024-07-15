@@ -6,7 +6,7 @@ RSpec.describe 'Api::Users', type: :request do
   describe 'Api::UsersController' do
     context 'params is valid' do
       it 'return a successful response' do
-        user_params = { user: { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge' } }
+        user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge', uid: '00000000001' }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:ok)
       end

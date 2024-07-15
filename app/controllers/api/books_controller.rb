@@ -2,17 +2,18 @@
 
 module Api
   class BooksController < ApplicationController
+    before_action :authenticate
+
     def index
-      user = User.find_by(email: params[:email])
-      render json: user.nil? ? [] : user.books
+      render json: current_user.nil? ? [] : current_user.books
     end
 
     def create
       book = Book.find_or_create_by!(book_params)
-      if book && create_user_book(book, params[:email])
+      if book && create_user_book(book, current_user)
         head :ok
       else
-        render json: { error: '本の登録に失敗しました' }, status: unprocessable_entity
+        render json: { error: '本の登録に失敗しました' }, status: :unprocessable_entity
       end
     rescue StandardError => e
       render json: { error: e.message }, status: :internal_server_error
@@ -24,8 +25,7 @@ module Api
       params.permit(:title, :author, :cover_image_url)
     end
 
-    def create_user_book(book, email)
-      user = User.find_by(email:)
+    def create_user_book(book, user)
       user_book = UserBook.find_or_create_by!(user:, book:)
       heading_number = params[:heading_number]&.to_i
       return false if heading_number.nil?

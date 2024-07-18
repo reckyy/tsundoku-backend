@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   post '/api/books', to: 'api/books#create'
   get 'api/books/:id/memos', to: 'api/memos#index', constraints: { id: /\d+/ }
   patch 'api/books/:id/memos', to: 'api/memos#update', constraints: { id: /\d+/ }
+  delete 'api/users/:uid', to: 'api/users#destroy', constraints: { uid: /\d+/ }
 end

@@ -10,4 +10,7 @@ class User < ApplicationRecord
 
   has_many :user_books, dependent: :destroy
   has_many :books, through: :user_books
+  has_many :headings, through: :user_books
+  has_many :memos, through: :headings
+  has_many :reading_logs, through: :memos
 end

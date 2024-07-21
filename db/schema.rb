@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_05_013052) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_20_091455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,6 +39,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_05_013052) do
     t.index ["heading_id"], name: "index_memos_on_heading_id"
   end
 
+  create_table "reading_logs", force: :cascade do |t|
+    t.date "read_date", null: false
+    t.bigint "memo_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memo_id", "read_date"], name: "index_reading_logs_on_memo_id_and_read_date", unique: true
+    t.index ["memo_id"], name: "index_reading_logs_on_memo_id"
+  end
+
   create_table "user_books", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "book_id", null: false
@@ -61,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_05_013052) do
 
   add_foreign_key "headings", "user_books"
   add_foreign_key "memos", "headings"
+  add_foreign_key "reading_logs", "memos"
   add_foreign_key "user_books", "books"
   add_foreign_key "user_books", "users"
 end

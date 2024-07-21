@@ -10,7 +10,7 @@ RSpec.describe 'Api::Books', type: :request do
   describe 'Api::BooksController#index' do
     context 'params is valid' do
       it 'return a successful response' do
-        params = { email: @user.email }
+        params = { uid: @user.uid }
         get(api_books_path, params:)
         expect(response).to have_http_status(:ok)
       end

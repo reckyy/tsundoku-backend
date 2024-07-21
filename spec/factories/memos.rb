@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :memo do
-    body { 'MyText' }
-    heading { nil }
+    sequence(:body) { |n| "本#{n}のメモ" }
+    heading
   end
 end

@@ -2,7 +2,14 @@
 
 module Api
   class UsersController < ApplicationController
-    before_action :authenticate, only: %i[destroy]
+    before_action :authenticate, only: %i[show destroy]
+
+    def show
+      reading_log = current_user.reading_logs.group(:read_date).count
+      results = reading_log.map { |date, count| { date: date.to_s, count: } }
+      user_info = { books: current_user.books, logs: results }
+      render json: user_info
+    end
 
     def create
       user = User.find_or_create_by!(user_params)

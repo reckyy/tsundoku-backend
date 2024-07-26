@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   patch 'api/books/:id/memos', to: 'api/memos#update', constraints: { id: /\d+/ }
   delete 'api/users/:uid', to: 'api/users#destroy', constraints: { uid: /\d+/ }
   get 'api/reading_logs', to: 'api/reading_logs#index'
+  get '/api/users/:uid', to: 'api/users#show', constraints: { uid: /\d+/ }
 end

@@ -12,7 +12,7 @@ module Api
 
     def update
       memo = Memo.find(params[:memo][:id])
-      if memo.update(memo_params) && keep_log(memo)
+      if memo.update(memo_params)
         head :ok
       else
         render json: { error: 'メモの登録に失敗しました' }, status: :unprocessable_entity
@@ -46,13 +46,6 @@ module Api
           }
         end
       }
-    end
-
-    def keep_log(memo)
-      log = ReadingLog.find_by(memo_id: memo.id, read_date: Time.zone.today)
-      return true if log
-
-      ReadingLog.create(memo_id: memo.id, read_date: Time.zone.today)
     end
   end
 end

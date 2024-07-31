@@ -5,9 +5,7 @@ module Api
     before_action :authenticate, only: %i[show destroy]
 
     def show
-      reading_log = current_user.reading_logs.group(:read_date).count
-      results = reading_log.map { |date, count| { date: date.to_s, count: } }
-      user_info = { books: current_user.books, logs: results }
+      user_info = current_user.info
       render json: user_info
     end
 

@@ -38,7 +38,7 @@ RSpec.describe 'Api::Books', type: :request do
       it 'return a bad response' do
         params = { title: 'テスト本のタイトル', author: 'テスト本の著者', uid: @user.uid }
         post(api_books_path, params:)
-        expect(response).to have_http_status(:internal_server_error)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

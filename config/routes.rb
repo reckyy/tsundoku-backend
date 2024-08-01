@@ -2,12 +2,12 @@
 
 Rails.application.routes.draw do
   post '/api/auth/callback/google', to: 'api/users#create'
-  get '/api/books', to: 'api/books#index'
-  post '/api/books', to: 'api/books#create'
-  get 'api/books/:id/memos', to: 'api/memos#index', constraints: { id: /\d+/ }
-  patch 'api/books/:id/memos', to: 'api/memos#update', constraints: { id: /\d+/ }
-  delete 'api/users/:uid', to: 'api/users#destroy', constraints: { uid: /\d+/ }
-  get 'api/reading_logs', to: 'api/reading_logs#index'
-  get '/api/users/:uid', to: 'api/users#show', constraints: { uid: /\d+/ }
-  patch 'api/headings', to: 'api/headings#update'
+  namespace :api do
+    resources :books, only: %i[index create] do
+      resources :memos, only: %i[index update]
+    end
+    resources :reading_logs, only: %i[index create]
+    resources :headings, only: %i[update]
+    resources :users, only: %i[show destroy]
+  end
 end

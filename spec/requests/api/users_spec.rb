@@ -24,7 +24,8 @@ RSpec.describe 'Api::Users', type: :request do
       context 'params is valid' do
         it 'return a nocontent response' do
           user = FactoryBot.create(:user)
-          delete "/api/users/#{user.uid}"
+          params = { uid: user.uid }
+          delete("/api/users/#{user.uid}", params:)
           expect(response).to have_http_status(:no_content)
         end
       end

@@ -11,7 +11,7 @@ RSpec.describe 'Api::ReadingLogs', type: :request do
     context 'params is valid' do
       it 'return a successful response' do
         params = { memo_id: @memo.id }
-        patch(api_reading_logs_path, params:)
+        post(api_reading_logs_path, params:)
         expect(response).to have_http_status(:ok)
       end
     end

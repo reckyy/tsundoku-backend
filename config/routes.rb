@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     resources :reading_logs, only: %i[index create]
     resources :headings, only: %i[update]
     resources :users, only: %i[show destroy]
+    resources :user_books, only: %i[destroy]
   end
 end

@@ -8,7 +8,7 @@ RSpec.describe 'Api::Memos', type: :request do
     FactoryBot.create(:reading_log)
   end
 
-  describe 'GET /index' do
+  describe 'Api::MemosController#index' do
     context 'params is valid' do
       it 'return a successful response' do
         params = { uid: @user.uid }

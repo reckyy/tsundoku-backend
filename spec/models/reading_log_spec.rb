@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ReadingLog, type: :model do
   before do
-    @reading_log = FactoryBot.create(:reading_log)
+    @reading_log = FactoryBot.create(:reading_log, read_date: Date.new(2024, 7, 21))
   end
 
   it 'is valid' do

@@ -24,7 +24,7 @@ module Api
       if current_user.destroy
         head :no_content
       else
-        render json: { error: '退会に失敗しました。' }, status: :unprocessable_entity
+        render json: { error: '退会に失敗しました。' }, status: :internal_server_error
       end
     end
 

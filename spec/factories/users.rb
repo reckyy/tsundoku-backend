@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :user do
-    name { 'hoge' }
-    sequence(:email) { |n| "test#{n}@example.com" }
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
     avatar_url { 'https://hogehoge-image' }
-    sequence(:uid) { |n| "0000000000#{n}" }
+    uid { Faker::IdNumber.south_african_id_number }
   end
 end

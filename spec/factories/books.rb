@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :book do
-    title { 'テスト本のタイトル' }
-    author { 'テスト本の著者' }
-    cover_image_url { 'http://localhost:3000/testimageurl' }
+    title { Faker::Book.title }
+    author { Faker::Book.author }
+    cover_image_url { Faker::Internet.url }
   end
 end

@@ -16,7 +16,7 @@ class Book < ApplicationRecord
       succeeded = save_user_book(user, heading_number) if succeeded
       raise ActiveRecord::Rollback unless succeeded
 
-      true
+      succeeded
     end
   end
 

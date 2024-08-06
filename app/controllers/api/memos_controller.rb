@@ -6,7 +6,7 @@ module Api
 
     def index
       user_book = UserBook.preload(headings: :memo).find_by(user: current_user, book_id: params[:book_id])
-      book_with_memos = { book: user_book.book, headings: user_book.headings.as_json(include: :memo) }
+      book_with_memos = { book: user_book.book, headings: user_book.headings.order(:id).as_json(include: :memo) }
       render json: book_with_memos
     end
 
@@ -18,7 +18,6 @@ module Api
         render json: { error: 'メモの登録に失敗しました' }, status: :unprocessable_entity
       end
     rescue StandardError => e
-      Rails.logger.error(e)
       render json: { error: e.message }, status: :internal_server_error
     end
 

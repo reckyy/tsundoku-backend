@@ -25,7 +25,7 @@ RSpec.describe 'Api::Users', type: :request do
       it 'return a bad response' do
         user_params = { name: 'hoge', avatar_url: 'https://hogehoge' }
         post api_auth_callback_google_path, params: user_params
-        expect(response).to have_http_status(:internal_server_error)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 

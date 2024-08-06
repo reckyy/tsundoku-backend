@@ -18,7 +18,6 @@ module Api
         render json: { error: 'メモの登録に失敗しました' }, status: :unprocessable_entity
       end
     rescue StandardError => e
-      Rails.logger.error(e)
       render json: { error: e.message }, status: :internal_server_error
     end
 

@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 ruby '3.3.1'
+gem 'acts_as_list'
 gem 'bootsnap', require: false
 gem 'pg'
 gem 'puma', '>= 5.0'

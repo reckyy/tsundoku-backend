@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     resources :users, only: %i[show destroy]
     resources :user_books, only: %i[destroy] do
       collection do
-        patch :bulk_update
+        post :move_position
       end
     end
   end

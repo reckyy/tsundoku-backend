@@ -6,4 +6,6 @@ class UserBook < ApplicationRecord
   has_many :headings, dependent: :destroy
 
   validates :user_id, uniqueness: { scope: :book_id }
+
+  acts_as_list
 end

@@ -6,7 +6,8 @@ module Api
 
     def move_position
       user_book = UserBook.find_by(book_id: params[:book_id], user: current_user)
-      if user_book.insert_at(params[:position])
+      destination_user_book = UserBook.find_by(book_id: params[:destination_book_id], user: current_user)
+      if user_book.swap_positions_with(destination_user_book)
         head :ok
       else
         head :unprocessable_entity

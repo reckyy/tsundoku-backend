@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  post '/api/auth/callback/google', to: 'api/users#create'
+  post '/api/auth/callback/google', to: 'api/auth#login'
   namespace :api do
     resources :books, only: %i[index create] do
       resources :memos, only: %i[index update]

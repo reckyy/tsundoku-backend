@@ -10,7 +10,7 @@ RSpec.describe 'Api::Books', type: :request do
   describe 'Api::BooksController#index' do
     context 'params is valid' do
       it 'return a successful response' do
-        params = { uid: @user.uid }
+        params = { user_id: @user.id }
         get(api_books_path, params:)
         expect(response).to have_http_status(:ok)
       end
@@ -28,7 +28,7 @@ RSpec.describe 'Api::Books', type: :request do
   describe 'Api::BooksController#create' do
     context 'params is valid' do
       it 'return a successful response' do
-        params = { title: 'テスト本のタイトル', author: 'テスト本の著者', coverImageUrl: 'http://localhost:3000/testcoverimageurl', uid: @user.uid, headingNumber: 5 }
+        params = { title: 'テスト本のタイトル', author: 'テスト本の著者', coverImageUrl: 'http://localhost:3000/testcoverimageurl', user_id: @user.id, headingNumber: 5 }
         post(api_books_path, params:)
         expect(response).to have_http_status(:ok)
       end
@@ -36,7 +36,7 @@ RSpec.describe 'Api::Books', type: :request do
 
     context 'params is not valid' do
       it 'return a bad response' do
-        params = { title: 'テスト本のタイトル', author: 'テスト本の著者', uid: @user.uid }
+        params = { title: 'テスト本のタイトル', author: 'テスト本の著者', user_id: @user.id }
         post(api_books_path, params:)
         expect(response).to have_http_status(:unprocessable_entity)
       end

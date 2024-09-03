@@ -10,7 +10,7 @@ RSpec.describe 'Api::Headings', type: :request do
   describe 'Api::HeadingsController#update' do
     context 'params is valid' do
       it 'return a successful response' do
-        params = { id: @heading.id, title: '更新後のタイトル' }
+        params = { user_id: @heading.user_book.user.id, id: @heading.id, title: '更新後のタイトル' }
         patch(api_heading_path(@heading.id), params:)
         expect(response).to have_http_status(:ok)
       end

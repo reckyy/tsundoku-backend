@@ -11,7 +11,7 @@ RSpec.describe 'Api::Memos', type: :request do
   describe 'Api::MemosController#index' do
     context 'params is valid' do
       it 'return a successful response' do
-        params = { uid: @user.uid }
+        params = { user_id: @user.id }
         get(api_reading_logs_path, params:)
         expect(response).to have_http_status(:ok)
       end

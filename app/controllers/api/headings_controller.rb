@@ -2,6 +2,8 @@
 
 module Api
   class HeadingsController < ApplicationController
+    before_action :authenticate, only: [:update]
+
     def update
       heading = Heading.find(params[:id])
       if heading.update(title: params[:title])

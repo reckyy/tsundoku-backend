@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
   private
 
   def authenticate
-    @current_user = User.find(params[:id])
+    @current_user = User.find(params[:user_id])
   end
 
   def camel2snake_params

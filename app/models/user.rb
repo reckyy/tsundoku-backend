@@ -5,7 +5,6 @@ class User < ApplicationRecord
     validates :name
     validates :email, uniqueness: true
     validates :avatar_url
-    validates :uid
     validates :handle_name, uniqueness: true
   end
 

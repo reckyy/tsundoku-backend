@@ -6,6 +6,6 @@ FactoryBot.define do
     email { Faker::Internet.email }
     avatar_url { 'https://hogehoge-image' }
     uid { Faker::IdNumber.south_african_id_number }
-    handle_name { Faker::Name.name }
+    handle_name { Faker::Name.unique.middle_name }
   end
 end

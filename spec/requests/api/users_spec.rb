@@ -15,7 +15,7 @@ RSpec.describe 'Api::Users', type: :request do
   describe 'Api::UsersController#create' do
     context 'registering new user' do
       it 'return a created response' do
-        user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge', uid: '00000000001' }
+        user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge' }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:created)
       end
@@ -23,7 +23,7 @@ RSpec.describe 'Api::Users', type: :request do
 
     context 'when a user logs in' do
       it 'return a ok response' do
-        user_params = { name: @user.name, email: @user.email, avatar_url: @user.avatar_url, uid: @user.uid }
+        user_params = { name: @user.name, email: @user.email, avatar_url: @user.avatar_url }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:ok)
       end
@@ -41,7 +41,7 @@ RSpec.describe 'Api::Users', type: :request do
       context 'params is valid' do
         it 'return a user_info' do
           params = { handle_name: @user.handle_name }
-          get("/api/users/#{@user.uid}", params:)
+          get("/api/users/#{@user.handle_name}", params:)
           expect(response).to have_http_status(:ok)
         end
       end
@@ -51,7 +51,7 @@ RSpec.describe 'Api::Users', type: :request do
       context 'params is valid' do
         it 'return a nocontent response' do
           params = { user_id: @user.id }
-          delete("/api/users/#{@user.uid}", params:)
+          delete("/api/users/#{@user.id}", params:)
           expect(response).to have_http_status(:no_content)
         end
       end

@@ -13,7 +13,7 @@ RSpec.describe 'Api::Auths', type: :request do
         user_params = { email: @user.email }
         get api_auth_add_session_user_data_path, params: user_params
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ id: @user.id.to_s, handle_name: @user.handle_name }.to_json)
+        expect(response.body).to eq({ id: @user.id.to_s }.to_json)
       end
     end
   end

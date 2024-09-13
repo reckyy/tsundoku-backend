@@ -5,7 +5,7 @@ module Api
     def add_session_user_data
       user = User.find_by(email: params[:email])
 
-      render json: { id: user.id.to_s, handle_name: user.handle_name }
+      render json: { id: user.id.to_s }
     end
   end
 end

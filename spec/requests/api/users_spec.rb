@@ -14,10 +14,10 @@ RSpec.describe 'Api::Users', type: :request do
 
   describe 'Api::UsersController#create' do
     context 'registering new user' do
-      it 'return a created response' do
+      it 'return a ok response' do
         user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge' }
         post api_auth_callback_google_path, params: user_params
-        expect(response).to have_http_status(:created)
+        expect(response).to have_http_status(:ok)
       end
     end
 
@@ -40,8 +40,8 @@ RSpec.describe 'Api::Users', type: :request do
     describe 'Api::UsersController#show' do
       context 'params is valid' do
         it 'return a user_info' do
-          params = { handle_name: @user.handle_name }
-          get("/api/users/#{@user.handle_name}", params:)
+          params = { id: @user.id }
+          get("/api/users/#{@user.id}", params:)
           expect(response).to have_http_status(:ok)
         end
       end

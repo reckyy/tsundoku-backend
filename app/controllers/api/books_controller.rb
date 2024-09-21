@@ -5,7 +5,7 @@ module Api
     before_action :authenticate
 
     def index
-      render json: current_user.nil? ? [] : current_user.books.position_order
+      render json: current_user.books_with_user_id
     end
 
     def create

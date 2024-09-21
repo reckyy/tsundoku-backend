@@ -18,4 +18,16 @@ class User < ApplicationRecord
     results = reading_log.map { |date, count| { date: date.to_s, count: } }
     { books:, logs: results }
   end
+
+  def books_with_user_id
+    books.position_order.map do |book|
+      {
+        id: book.id,
+        title: book.title,
+        author: book.title,
+        cover_image_url: book.cover_image_url,
+        user_id: id
+      }
+    end
+  end
 end

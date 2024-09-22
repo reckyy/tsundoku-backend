@@ -2,7 +2,7 @@
 
 module API
   class UsersController < ApplicationController
-    before_action :authenticate, only: %i[destroy]
+    skip_before_action :authenticate, only: %i[show create]
 
     def show
       user_info = User.find_by(id: params[:id]).info

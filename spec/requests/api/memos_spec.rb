@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::Memos', type: :request do
+RSpec.describe 'API::Memos', type: :request do
   before do
     @user = FactoryBot.create(:user)
     FactoryBot.create(:reading_log)
   end
 
-  describe 'Api::MemosController#index' do
+  describe 'API::MemosController#index' do
     context 'params is valid' do
       it 'return a successful response' do
         params = { user_id: @user.id }

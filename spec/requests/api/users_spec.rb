@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::Users', type: :request do
+RSpec.describe 'API::Users', type: :request do
   before do
     @user = FactoryBot.create(:user)
     book = FactoryBot.create(:book)
@@ -12,7 +12,7 @@ RSpec.describe 'Api::Users', type: :request do
     FactoryBot.create(:reading_log, memo:)
   end
 
-  describe 'Api::UsersController#create' do
+  describe 'API::UsersController#create' do
     context 'registering new user' do
       it 'return a ok response' do
         user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge' }
@@ -37,7 +37,7 @@ RSpec.describe 'Api::Users', type: :request do
       end
     end
 
-    describe 'Api::UsersController#show' do
+    describe 'API::UsersController#show' do
       context 'params is valid' do
         it 'return a user_info' do
           params = { id: @user.id }
@@ -47,7 +47,7 @@ RSpec.describe 'Api::Users', type: :request do
       end
     end
 
-    describe 'Api::UsersController#destroy' do
+    describe 'API::UsersController#destroy' do
       context 'params is valid' do
         it 'return a nocontent response' do
           params = { user_id: @user.id }

@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::ReadingLogs', type: :request do
+RSpec.describe 'API::ReadingLogs', type: :request do
   before do
     @memo = FactoryBot.create(:memo)
     @user = @memo.heading.user_book.user
     @reading_log = FactoryBot.create(:reading_log, memo: @memo)
   end
 
-  describe 'Api::ReadingLogsController#index' do
+  describe 'API::ReadingLogsController#index' do
     context 'params is valid' do
       it 'return logs with date and count set' do
         params = { user_id: @user.id }
@@ -20,7 +20,7 @@ RSpec.describe 'Api::ReadingLogs', type: :request do
     end
   end
 
-  describe 'Api::ReadingLogsController#create' do
+  describe 'API::ReadingLogsController#create' do
     context 'params is valid' do
       it 'return a successful response' do
         params = { user_id: @user.id, memo_id: @memo.id }

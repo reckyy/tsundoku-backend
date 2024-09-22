@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Api
+module API
   class HeadingsController < ApplicationController
     before_action :authenticate, only: [:update]
 

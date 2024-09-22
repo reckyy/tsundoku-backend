@@ -13,14 +13,18 @@ class Book < ApplicationRecord
   scope :position_order, -> { order(position: :asc) }
 
   def save_with_user_book(user, heading_number)
+    succeeded = false
     Book.transaction do
       succeeded = save
       succeeded = save_user_book(user, heading_number) if succeeded
       raise ActiveRecord::Rollback unless succeeded
-
-      succeeded
     end
+    succeeded
+  rescue StandardError
+    false
   end
+
+  private
 
   def save_user_book(user, heading_number)
     position = UserBook.all.length + 1

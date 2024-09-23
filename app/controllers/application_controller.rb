@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   before_action :camel2snake_params
+  before_action :authenticate
 
   attr_reader :current_user
 

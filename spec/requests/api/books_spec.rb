@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::Books', type: :request do
+RSpec.describe 'API::Books', type: :request do
   before do
     @user = FactoryBot.create(:user, email: 'test1@example.com')
   end
 
-  describe 'Api::BooksController#index' do
+  describe 'API::BooksController#index' do
     context 'params is valid' do
       it 'return a successful response' do
         params = { user_id: @user.id }
@@ -25,7 +25,7 @@ RSpec.describe 'Api::Books', type: :request do
     end
   end
 
-  describe 'Api::BooksController#create' do
+  describe 'API::BooksController#create' do
     context 'params is valid' do
       it 'return a successful response' do
         params = { title: 'テスト本のタイトル', author: 'テスト本の著者', coverImageUrl: 'http://localhost:3000/testcoverimageurl', user_id: @user.id, headingNumber: 5 }
@@ -38,7 +38,7 @@ RSpec.describe 'Api::Books', type: :request do
       it 'return a bad response' do
         params = { title: 'テスト本のタイトル', author: 'テスト本の著者', user_id: @user.id }
         post(api_books_path, params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
       end
     end
   end

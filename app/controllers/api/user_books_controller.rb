@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-module Api
+module API
   class UserBooksController < ApplicationController
-    before_action :authenticate, only: %i[move_position destroy]
-
     def move_position
       user_book = UserBook.find_by(book_id: params[:book_id], user: current_user)
       destination_user_book = UserBook.find_by(book_id: params[:destination_book_id], user: current_user)

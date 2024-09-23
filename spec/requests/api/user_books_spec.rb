@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::UserBooks', type: :request do
+RSpec.describe 'API::UserBooks', type: :request do
   before do
     @user_book = FactoryBot.create(:user_book)
   end
 
-  describe 'Api::UserBooksController#move_position' do
+  describe 'API::UserBooksController#move_position' do
     context 'params is valid' do
       it 'succeeds in swaping the position' do
         expect(@user_book.position).to eq(1)
@@ -22,7 +22,7 @@ RSpec.describe 'Api::UserBooks', type: :request do
     end
   end
 
-  describe 'Api::UserBooksController#destroy' do
+  describe 'API::UserBooksController#destroy' do
     context 'params is valid' do
       it 'return a nocontent response' do
         params = { book_id: @user_book.book.id, user_id: @user_book.user.id }

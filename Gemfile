@@ -2,13 +2,13 @@
 
 source 'https://rubygems.org'
 
-ruby '3.3.1'
+ruby '3.3.5'
 gem 'acts_as_list'
 gem 'bootsnap', require: false
 gem 'pg'
 gem 'puma', '>= 5.0'
 gem 'rack-cors'
-gem 'rails', '~> 7.1.3', '>= 7.1.3.3'
+gem 'rails', '7.2.1'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do

@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::Auths', type: :request do
+RSpec.describe 'API::Auths', type: :request do
   before do
     @user = FactoryBot.create(:user)
   end
 
-  describe 'Api::AuthController#add_session_user_data' do
+  describe 'API::AuthController#add_session_user_data' do
     context 'params is valid' do
       it 'return a successful response' do
         user_params = { email: @user.email }

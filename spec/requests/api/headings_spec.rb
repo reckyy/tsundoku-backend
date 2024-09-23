@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::Headings', type: :request do
+RSpec.describe 'API::Headings', type: :request do
   before do
     @heading = FactoryBot.create(:heading)
   end
 
-  describe 'Api::HeadingsController#update' do
+  describe 'API::HeadingsController#update' do
     context 'params is valid' do
       it 'return a successful response' do
         params = { user_id: @heading.user_book.user.id, id: @heading.id, title: '更新後のタイトル' }

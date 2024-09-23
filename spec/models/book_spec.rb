@@ -3,23 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe Book, type: :model do
-  it 'is valid with title, author and cover_image_url' do
-    book = FactoryBot.build(:book)
-    expect(book).to be_valid
+  before do
+    @user = FactoryBot.create(:user)
   end
 
-  it 'is invalid without title' do
-    book = FactoryBot.build(:book, title: nil)
-    expect(book).to be_invalid
-  end
+  let(:book) { Book.find_or_initialize_by(title: 'テストのタイトル', author: 'テストの著者', cover_image_url: 'テストの表紙URL') }
 
-  it 'is invalid without author' do
-    book = FactoryBot.build(:book, author: nil)
-    expect(book).to be_invalid
-  end
+  describe '#save_with_user_book' do
+    context 'when save is successful' do
+      it 'returns true' do
+        expect(book.save_with_user_book(@user, 7)).to eq(true)
+      end
+    end
 
-  it 'is invalid without cover_image_url' do
-    book = FactoryBot.build(:book, cover_image_url: nil)
-    expect(book).to be_invalid
+    context 'when save is failed' do
+      it 'returns false and book, user_book and chapters are not saved' do
+        allow(book).to receive(:save_user_book).and_return(false)
+        expect(book.save_with_user_book(@user, 5)).to eq(false)
+        expect(Book.exists?(title: 'テストのタイトル', author: 'テストの著者', cover_image_url: 'テストの表紙URL')).to eq(false)
+      end
+    end
   end
 end

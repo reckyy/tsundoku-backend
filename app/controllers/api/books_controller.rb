@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-module Api
+module API
   class BooksController < ApplicationController
-    before_action :authenticate
-
     def index
       render json: current_user.books_with_user_id
     end

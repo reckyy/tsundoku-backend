@@ -12,7 +12,7 @@ RSpec.describe Book, type: :model do
   describe '#save_with_user_book' do
     context 'when save is successful' do
       it 'returns true' do
-        expect(book.save_with_user_book(@user, 7)).to eq(true)
+        expect(book.save_with_user_book(@user, 7)).to be_truthy
       end
     end
 

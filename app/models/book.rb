@@ -34,6 +34,5 @@ class Book < ApplicationRecord
     (1..heading_number).map do |n|
       user_book.headings.create!(number: n, title: '', memo_attributes: {})
     end
-    true
   end
 end

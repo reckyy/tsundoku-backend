@@ -18,7 +18,7 @@ RSpec.describe Book, type: :model do
 
     context 'when save is failed' do
       it 'returns false and book, user_book and chapters are not saved' do
-        allow(book).to receive(:save_user_book).and_return(false)
+        allow(book).to receive(:save_user_book).and_raise('bookの保存中にエラー発生')
         expect(book.save_with_user_book(@user, 5)).to eq(false)
         expect(Book.exists?(title: 'テストのタイトル', author: 'テストの著者', cover_image_url: 'テストの表紙URL')).to eq(false)
       end

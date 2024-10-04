@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   post '/api/auth/callback/google', to: 'api/users#create'
-  get 'api/auth/add_session_user_data', to: 'api/auth#add_session_user_data'
   namespace :api do
     resources :books, only: %i[index create]
     resources :memos, only: %i[index update]

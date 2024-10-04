@@ -13,7 +13,8 @@ module API
       user = User.find_or_create_by(user_params)
 
       if user.persisted?
-        head :ok
+        token = create_token(user.id)
+        render json: { id: user.id, token: }
       else
         render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
       end

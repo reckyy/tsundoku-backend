@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'API::Users', type: :request do
+  let(:current_user) { @user }
+
   before do
     @user = FactoryBot.create(:user)
     book = FactoryBot.create(:book)
@@ -10,6 +12,7 @@ RSpec.describe 'API::Users', type: :request do
     heading = FactoryBot.create(:heading, user_book:)
     memo = FactoryBot.create(:memo, heading:)
     FactoryBot.create(:reading_log, memo:)
+    authorization_stub
   end
 
   describe 'API::UsersController#create' do
@@ -50,8 +53,7 @@ RSpec.describe 'API::Users', type: :request do
     describe 'API::UsersController#destroy' do
       context 'params is valid' do
         it 'return a nocontent response' do
-          params = { user_id: @user.id }
-          delete("/api/users/#{@user.id}", params:)
+          delete("/api/users/#{@user.id}")
           expect(response).to have_http_status(:no_content)
         end
       end

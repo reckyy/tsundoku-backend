@@ -25,7 +25,7 @@ class User < ApplicationRecord
         id: book.id,
         title: book.title,
         author: book.author,
-        cover_image_url: book.cover_image_url,
+        coverImageUrl: book.cover_image_url,
         user_id: id
       }
     end

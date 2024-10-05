@@ -23,7 +23,7 @@ RSpec.describe User, type: :model do
 
   describe '#books_with_user_id' do
     it 'returns book with user_id' do
-      expected_result = [{ id: @book.id, title: @book.title, author: @book.author, cover_image_url: @book.cover_image_url, user_id: @user.id }]
+      expected_result = [{ id: @book.id, title: @book.title, author: @book.author, coverImageUrl: @book.cover_image_url, user_id: @user.id }]
       expect(@user.books_with_user_id).to eq(expected_result)
     end
   end

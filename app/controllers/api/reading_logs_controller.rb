@@ -8,7 +8,7 @@ module API
     end
 
     def create
-      reading_log = ReadingLog.find_or_create_by!(memo_id: params[:memo_id], read_date: Time.zone.today)
+      reading_log = ReadingLog.find_or_create_by(memo_id: params[:memo_id], read_date: Time.zone.today)
       if reading_log
         head :ok
       else

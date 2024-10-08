@@ -3,8 +3,8 @@
 module API
   class UserBooksController < ApplicationController
     def move_position
-      user_book = UserBook.find_by(book_id: params[:book_id], user: current_user)
-      destination_user_book = UserBook.find_by(book_id: params[:destination_book_id], user: current_user)
+      user_book = UserBook.find_by!(book_id: params[:book_id], user: current_user)
+      destination_user_book = UserBook.find_by!(book_id: params[:destination_book_id], user: current_user)
       if user_book.swap_positions_with(destination_user_book)
         head :ok
       else
@@ -13,7 +13,7 @@ module API
     end
 
     def destroy
-      user_book = UserBook.find_by(book_id: params[:book_id], user_id: current_user.id)
+      user_book = UserBook.find_by!(book_id: params[:book_id], user_id: current_user.id)
       if user_book.destroy
         head :no_content
       else

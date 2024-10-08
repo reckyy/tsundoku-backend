@@ -5,7 +5,7 @@ module API
     skip_before_action :authenticate, only: %i[show create]
 
     def show
-      user = User.find_by(id: params[:id])
+      user = User.find(params[:id])
       user_info_json = UserInfoResource.new(user).serialize
       render json: user_info_json
     end

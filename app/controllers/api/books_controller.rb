@@ -3,7 +3,7 @@
 module API
   class BooksController < ApplicationController
     def index
-      render json: current_user.books_with_user_id
+      render json: UserBooksResource.new(current_user).serialize
     end
 
     def create

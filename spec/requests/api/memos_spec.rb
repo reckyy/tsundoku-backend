@@ -23,7 +23,7 @@ RSpec.describe 'API::Memos', type: :request do
   describe 'API::MemosController#update' do
     context 'params is valid' do
       it 'return a successful response and update the data successfully' do
-        params = { memo: { id: @memo.id, body: '更新後のメモ' } }
+        params = { id: @memo.id, body: '更新後のメモ' }
         patch(api_memo_path(@memo.id), params:)
         expect(response).to have_http_status(:ok)
         @memo.reload

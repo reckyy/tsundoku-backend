@@ -9,20 +9,12 @@ module API
     end
 
     def update
-      memo = Memo.find(params[:memo][:id])
-      if memo.update(memo_params)
+      memo = Memo.find(params[:id])
+      if memo.update(body: params[:body])
         head :ok
       else
         render json: { error: 'メモの登録に失敗しました' }, status: :unprocessable_entity
       end
-    rescue StandardError => e
-      render json: { error: e.message }, status: :internal_server_error
-    end
-
-    private
-
-    def memo_params
-      params.require(:memo).permit(:id, :body)
     end
   end
 end

@@ -4,10 +4,21 @@ require 'rails_helper'
 
 RSpec.describe 'API::UserBooks', type: :request do
   let(:current_user) { @user_book.user }
+  let(:book) { FactoryBot.create(:book) }
 
   before do
     @user_book = FactoryBot.create(:user_book)
     authorization_stub
+  end
+
+  describe 'API::UserBooksController#create' do
+    context 'params is valid' do
+      it 'returns a successful response' do
+        params = { title: book.title, author: book.author, coverImageUrl: book.cover_image_url, headingNumber: 5 }
+        post(api_user_books_path, params:)
+        expect(response).to have_http_status(:ok)
+      end
+    end
   end
 
   describe 'API::UserBooksController#move_position' do

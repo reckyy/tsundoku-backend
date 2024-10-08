@@ -11,28 +11,4 @@ class Book < ApplicationRecord
   has_many :users, through: :user_books
 
   scope :position_order, -> { order(position: :asc) }
-
-  def save_with_user_book(user, heading_number)
-    Book.transaction do
-      save && save_user_book(user, heading_number)
-    end
-  rescue StandardError
-    false
-  end
-
-  private
-
-  def save_user_book(user, heading_number)
-    position = UserBook.all.length + 1
-    user_book = UserBook.find_or_create_by!(user:, book: self, position:)
-    return false if heading_number.zero? # もしheading_numberがnilなら0になるため
-
-    insert_chapter(user_book, heading_number)
-  end
-
-  def insert_chapter(user_book, heading_number)
-    (1..heading_number).map do |n|
-      user_book.headings.create!(number: n, title: '', memo_attributes: {})
-    end
-  end
 end

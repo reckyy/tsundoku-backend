@@ -4,7 +4,9 @@ source 'https://rubygems.org'
 
 ruby '3.3.5'
 gem 'acts_as_list'
+gem 'alba'
 gem 'bootsnap', require: false
+gem 'jwt'
 gem 'pg'
 gem 'puma', '>= 5.0'
 gem 'rack-cors'

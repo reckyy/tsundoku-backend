@@ -14,12 +14,15 @@ RSpec.describe UserInfoResource, type: :resource do
   it 'returns books and logs combined' do
     user_info_json = UserInfoResource.new(@user).serialize
     expected_user_info_json = {
-      books: @user_books.map do |ub|
+      user_books: @user_books.map do |ub|
         {
-          id: ub.book.id,
-          title: ub.book.title,
-          author: ub.book.author,
-          coverImageUrl: ub.book.cover_image_url
+          id: ub.id,
+          book: {
+            id: ub.book.id,
+            title: ub.book.title,
+            author: ub.book.author,
+            coverImageUrl: ub.book.cover_image_url
+          }
         }
       end,
       logs: @reading_logs.sort_by(&:read_date).map do |log|

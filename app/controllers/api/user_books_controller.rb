@@ -2,7 +2,11 @@
 
 module API
   class UserBooksController < ApplicationController
-    before_action :set_user_book, only: %i[move_position destroy]
+    before_action :set_user_book, only: %i[position destroy]
+
+    def index
+      render json: UserBooksResource.new(current_user).serialize
+    end
 
     def create
       book = Book.find_by!(book_params)
@@ -14,7 +18,7 @@ module API
       end
     end
 
-    def move_position
+    def position
       destination_user_book = UserBook.find_by!(book_id: params[:destination_book_id], user: current_user)
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
@@ -38,7 +42,7 @@ module API
     end
 
     def set_user_book
-      @user_book = UserBook.find_by!(book_id: params[:book_id], user: current_user)
+      @user_book = UserBook.find_by!(book_id: params[:user_book_id], user: current_user)
     end
   end
 end

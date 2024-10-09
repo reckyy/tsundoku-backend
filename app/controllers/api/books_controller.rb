@@ -2,10 +2,6 @@
 
 module API
   class BooksController < ApplicationController
-    def index
-      render json: UserBooksResource.new(current_user).serialize
-    end
-
     def create
       book = Book.find_or_create_by(book_params)
       if book.persisted?

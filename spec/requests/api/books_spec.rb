@@ -9,15 +9,6 @@ RSpec.describe 'API::Books', type: :request do
     authorization_stub
   end
 
-  describe 'API::BooksController#index' do
-    context 'params is valid' do
-      it 'return a successful response' do
-        get(api_books_path)
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
-
   describe 'API::BooksController#create' do
     context 'params is valid' do
       it 'return a successful response' do

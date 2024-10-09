@@ -8,15 +8,18 @@ RSpec.describe UserBooksResource, type: :resource do
     @user_books = FactoryBot.create_list(:user_book, 2, user: @user)
   end
 
-  it 'returns books' do
+  it 'returns user_books' do
     user_books_json = UserBooksResource.new(@user).serialize
     expected_user_books_json = {
-      books: @user_books.map do |ub|
+      user_books: @user_books.map do |ub|
         {
-          id: ub.book.id,
-          title: ub.book.title,
-          author: ub.book.author,
-          coverImageUrl: ub.book.cover_image_url
+          id: ub.id,
+          book: {
+            id: ub.book.id,
+            title: ub.book.title,
+            author: ub.book.author,
+            coverImageUrl: ub.book.cover_image_url
+          }
         }
       end
     }.to_json

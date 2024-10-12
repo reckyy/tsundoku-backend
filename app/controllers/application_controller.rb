@@ -18,8 +18,9 @@ class ApplicationController < ActionController::API
     token = request.headers[:Authorization]&.split&.last
     secret_key = Rails.application.credentials.secret_key_base
     decoded_token = JWT.decode(token, secret_key, 'HS256')
-    if decoded_token
-      @current_user = User.find(decoded_token[0]['user_id'])
+    user_id = decoded_token[0]&.fetch('user_id')
+    if user_id
+      @current_user = User.find(user_id)
     else
       render json: { errors: ['Not Authenticated'] }, status: :unauthorized
     end

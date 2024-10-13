@@ -74,6 +74,7 @@ GEM
     acts_as_list (1.2.2)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
+    alba (3.2.0)
     ast (2.4.2)
     base64 (0.2.0)
     bigdecimal (3.1.8)
@@ -107,6 +108,8 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.7.2)
+    jwt (2.9.3)
+      base64
     language_server-protocol (3.17.0.3)
     logger (1.6.1)
     loofah (2.22.0)
@@ -267,10 +270,12 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
+  alba
   bootsnap
   debug
   factory_bot_rails
   faker
+  jwt
   pg
   puma (>= 5.0)
   rack-cors

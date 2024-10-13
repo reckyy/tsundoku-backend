@@ -5,15 +5,17 @@ module API
     skip_before_action :authenticate, only: %i[show create]
 
     def show
-      user_info = User.find_by(id: params[:id]).info
-      render json: user_info
+      user = User.find(params[:id])
+      user_info_json = UserInfoResource.new(user).serialize
+      render json: user_info_json
     end
 
     def create
       user = User.find_or_create_by(user_params)
 
       if user.persisted?
-        head :ok
+        token = create_token(user.id)
+        render json: { id: user.id, token: }
       else
         render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
       end

@@ -2,7 +2,7 @@
 
 module API
   class UsersController < ApplicationController
-    skip_before_action :authenticate, only: %i[show create]
+    skip_before_action :verify_google_id_token, only: %i[show create]
 
     def show
       user = User.find(params[:id])
@@ -14,8 +14,7 @@ module API
       user = User.find_or_create_by(user_params)
 
       if user.persisted?
-        token = create_token(user.id)
-        render json: { id: user.id, token: }
+        render json: { id: user.id }
       else
         render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
       end

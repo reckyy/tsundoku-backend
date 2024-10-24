@@ -1,27 +1,25 @@
 # frozen_string_literal: true
 
+require 'googleauth'
+
 class ApplicationController < ActionController::API
   before_action :camel2snake_params
-  before_action :authenticate
+  before_action :verify_google_id_token
 
   attr_reader :current_user
 
-  def create_token(user_id)
-    payload = { user_id: }
-    secret_key = Rails.application.credentials.secret_key_base
-    JWT.encode(payload, secret_key, 'HS256')
-  end
-
   private
 
-  def authenticate
-    token = request.headers[:Authorization]&.split&.last
-    secret_key = Rails.application.credentials.secret_key_base
-    decoded_token = JWT.decode(token, secret_key, 'HS256')
-    user_id = decoded_token[0]&.fetch('user_id')
-    if user_id
-      @current_user = User.find(user_id)
-    else
+  def verify_google_id_token
+    audience = ENV.fetch('AUDIENCE')
+    issuer = ENV.fetch('ISSUER')
+    id_token = request.headers[:Authorization]&.split&.last
+    Rails.logger.debug(id_token)
+
+    begin
+      payload = Google::Auth::IDTokens.verify_oidc(id_token, aud: audience, iss: issuer)
+      @current_user = User.find_by!(name: payload['name'], email: payload['email'])
+    rescue Google::Auth::IDTokens::VerificationError
       render json: { errors: ['Not Authenticated'] }, status: :unauthorized
     end
   end

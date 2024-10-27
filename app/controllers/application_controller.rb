@@ -14,7 +14,6 @@ class ApplicationController < ActionController::API
     audience = ENV.fetch('AUDIENCE')
     issuer = ENV.fetch('ISSUER')
     id_token = request.headers[:Authorization]&.split&.last
-    Rails.logger.debug(id_token)
 
     begin
       payload = Google::Auth::IDTokens.verify_oidc(id_token, aud: audience, iss: issuer)

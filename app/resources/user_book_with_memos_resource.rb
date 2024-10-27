@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class UserBookWithMemosResource < BaseResource
+  attributes :id
   one :book, resource: BookResource
 
   many :headings,

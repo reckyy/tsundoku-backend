@@ -11,9 +11,10 @@ RSpec.describe UserInfoResource, type: :resource do
     @reading_logs = FactoryBot.create_list(:reading_log, 2, memo:)
   end
 
-  it 'returns books and logs combined' do
+  it 'returns name, books and logs combined' do
     user_info_json = UserInfoResource.new(@user).serialize
     expected_user_info_json = {
+      name: @user.name,
       user_books: @user_books.map do |ub|
         {
           id: ub.id,

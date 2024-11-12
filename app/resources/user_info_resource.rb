@@ -4,7 +4,7 @@ class UserInfoResource < BaseResource
   attributes :name
 
   attribute :user_books do
-    UserBooksResource.new(object).serializable_hash['user_books']
+    UserBooksResource.new(object).serializable_hash
   end
 
   attribute :logs do

@@ -7,12 +7,14 @@ class UserBook < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :book_id }
 
-  acts_as_list
+  enum :status, { unread: 0, reading: 1, finished: 2 }, prefix: true
+
+  acts_as_list scope: :user
 
   def swap_positions_with(item)
-    item_position = item.current_position
+    item_position = item.position
 
-    item.set_list_position(current_position)
+    item.set_list_position(position)
     set_list_position(item_position)
   end
 

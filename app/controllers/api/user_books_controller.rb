@@ -2,7 +2,7 @@
 
 module API
   class UserBooksController < ApplicationController
-    before_action :set_user_book, only: %i[position destroy]
+    before_action :set_user_book, only: %i[update position destroy]
 
     def index
       render json: UserBooksResource.new(current_user).serialize
@@ -19,11 +19,19 @@ module API
     end
 
     def position
-      destination_user_book = UserBook.find_by!(book_id: params[:destination_book_id], user: current_user)
+      destination_user_book = UserBook.find(params[:destination_book_id])
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
         head :unprocessable_entity
+      end
+    end
+
+    def update
+      if @user_book.update(status: params[:status])
+        head :ok
+      else
+        render json: { error: '本の情報の更新に失敗しました。' }, status: :unprocessable_entity
       end
     end
 
@@ -42,7 +50,7 @@ module API
     end
 
     def set_user_book
-      @user_book = UserBook.find_by!(book_id: params[:user_book_id], user: current_user)
+      @user_book = UserBook.find(params[:user_book_id])
     end
   end
 end

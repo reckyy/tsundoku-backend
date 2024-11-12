@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :reading_logs, only: %i[index create]
     resources :headings, only: %i[create update]
     resources :users, only: %i[show update destroy]
-    resources :user_books, only: %i[index create destroy] do
+    resources :user_books, only: %i[index create update destroy] do
       member do
         patch :position
       end

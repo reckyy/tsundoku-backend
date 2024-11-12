@@ -15,17 +15,22 @@ RSpec.describe UserInfoResource, type: :resource do
     user_info_json = UserInfoResource.new(@user).serialize
     expected_user_info_json = {
       name: @user.name,
-      user_books: @user_books.map do |ub|
-        {
-          id: ub.id,
-          book: {
-            id: ub.book.id,
-            title: ub.book.title,
-            author: ub.book.author,
-            coverImageUrl: ub.book.cover_image_url
+      user_books: {
+        unread: @user_books.map do |ub|
+          {
+            id: ub.id,
+            status: ub.status,
+            book: {
+              id: ub.book.id,
+              title: ub.book.title,
+              author: ub.book.author,
+              coverImageUrl: ub.book.cover_image_url
+            }
           }
-        }
-      end,
+        end,
+        reading: [],
+        finished: []
+      },
       logs: @reading_logs.sort_by(&:read_date).map do |log|
         {
           date: log.read_date.to_s,

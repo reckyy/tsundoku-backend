@@ -2,6 +2,7 @@
 
 module API
   class UsersController < ApplicationController
+    before_action :verify_google_id_token, only: %i[create]
     skip_before_action :authenticate, only: %i[show create]
 
     def show

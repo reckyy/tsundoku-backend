@@ -24,4 +24,15 @@ class ApplicationController < ActionController::API
   def camel2snake_params
     params.deep_transform_keys!(&:underscore)
   end
+
+  def verify_google_id_token
+    audience = ENV.fetch('AUDIENCE')
+    issuer = ENV.fetch('ISSUER')
+
+    begin
+      Google::Auth::IDTokens.verify_oidc(params[:id_token], aud: audience, iss: issuer)
+    rescue Google::Auth::IDTokens::VerificationError => e
+      render json: { errors: ["Not Authenticated #{e.message}"] }, status: :unauthorized
+    end
+  end
 end

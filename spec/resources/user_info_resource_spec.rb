@@ -16,7 +16,7 @@ RSpec.describe UserInfoResource, type: :resource do
     expected_user_info_json = {
       name: @user.name,
       user_books: {
-        unread: @user_books.map do |ub|
+        unread_books: @user_books.map do |ub|
           {
             id: ub.id,
             status: ub.status,
@@ -28,8 +28,8 @@ RSpec.describe UserInfoResource, type: :resource do
             }
           }
         end,
-        reading: [],
-        finished: []
+        reading_books: [],
+        finished_books: []
       },
       logs: @reading_logs.sort_by(&:read_date).map do |log|
         {

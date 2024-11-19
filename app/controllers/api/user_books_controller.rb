@@ -5,7 +5,13 @@ module API
     before_action :set_user_book, only: %i[update position destroy]
 
     def index
-      render json: UserBooksResource.new(current_user).serialize
+      user_books = current_user.user_books
+      categorized_user_books = CategorizedUserBooks.new(
+        user_books.status_unread_ordered,
+        user_books.status_reading_ordered,
+        user_books.status_finished_ordered
+      )
+      render json: UserBooksResource.new(categorized_user_books).serialize
     end
 
     def create

@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
 
   def authenticate
     token = request.headers[:Authorization]&.split&.last
-    secret_key = Rails.application.credentials.secret_key_base
+    secret_key = ENV.fetch('SECRET_KEY_BASE')
     decoded_token = JWT.decode(token, secret_key, 'HS256')
     if decoded_token
       @current_user = User.find(decoded_token[0]['id'])

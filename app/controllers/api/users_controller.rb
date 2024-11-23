@@ -36,7 +36,7 @@ module API
     end
 
     def encode_jwt(payload)
-      secret_key = Rails.application.credentials.secret_key_base
+      secret_key = ENV.fetch('SECRET_KEY_BASE')
       JWT.encode(payload, secret_key, 'HS256')
     end
   end

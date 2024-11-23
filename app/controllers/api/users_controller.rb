@@ -2,19 +2,20 @@
 
 module API
   class UsersController < ApplicationController
-    skip_before_action :verify_google_id_token, only: %i[show create]
+    before_action :verify_google_id_token, only: %i[create]
+    skip_before_action :authenticate, only: %i[show create]
 
     def show
       user = User.find(params[:id])
-      user_info_json = UserInfoResource.new(user).serialize
-      render json: user_info_json
+      render json: UserInfoResource.new(user).serialize
     end
 
     def create
       user = User.find_or_create_by(user_params)
 
       if user.persisted?
-        render json: { id: user.id }
+        encoded_token = encode_jwt({ id: user.id })
+        render json: { id: user.id, access_token: encoded_token }
       else
         render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
       end
@@ -32,6 +33,11 @@ module API
 
     def user_params
       params.permit(:id, :name, :email, :avatar_url)
+    end
+
+    def encode_jwt(payload)
+      secret_key = Rails.application.credentials.secret_key_base
+      JWT.encode(payload, secret_key, 'HS256')
     end
   end
 end

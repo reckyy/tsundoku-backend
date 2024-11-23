@@ -11,6 +11,7 @@ RSpec.describe UserBookResource, type: :resource do
     user_book_json = UserBookResource.new(@user_book).serialize
     expected_user_book_json = {
       id: @user_book.id,
+      status: @user_book.status,
       book: {
         id: @user_book.book.id,
         title: @user_book.book.title,

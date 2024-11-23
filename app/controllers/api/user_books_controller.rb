@@ -2,16 +2,22 @@
 
 module API
   class UserBooksController < ApplicationController
-    before_action :set_user_book, only: %i[position destroy]
+    before_action :set_user_book, only: %i[update position destroy]
 
     def index
-      render json: UserBooksResource.new(current_user).serialize
+      user_books = current_user.user_books
+      categorized_user_books = CategorizedUserBooks.new(
+        user_books.status_unread_ordered,
+        user_books.status_reading_ordered,
+        user_books.status_finished_ordered
+      )
+      render json: UserBooksResource.new(categorized_user_books).serialize
     end
 
     def create
       book = Book.find_by!(book_params)
       user_book = UserBook.new(book:, user: current_user)
-      if user_book.save_with_heading(params[:heading_number]&.to_i)
+      if user_book.save_with_heading
         head :ok
       else
         render json: { error: '本の登録に失敗しました。' }, status: :unprocessable_entity
@@ -19,11 +25,19 @@ module API
     end
 
     def position
-      destination_user_book = UserBook.find_by!(book_id: params[:destination_book_id], user: current_user)
+      destination_user_book = UserBook.find(params[:destination_book_id])
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
         head :unprocessable_entity
+      end
+    end
+
+    def update
+      if @user_book.update(status: params[:status])
+        head :ok
+      else
+        render json: { error: '本の情報の更新に失敗しました。' }, status: :unprocessable_entity
       end
     end
 
@@ -42,7 +56,7 @@ module API
     end
 
     def set_user_book
-      @user_book = UserBook.find_by!(book_id: params[:user_book_id], user: current_user)
+      @user_book = UserBook.find(params[:user_book_id])
     end
   end
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class UserBooksResource < BaseResource
-  many :user_books,
-       proc { |user_books|
-         user_books.order(:position)
-       },
-       resource: UserBookResource
+  many :unread_books, resource: UserBookResource
+  many :reading_books, resource: UserBookResource
+  many :finished_books, resource: UserBookResource
 end

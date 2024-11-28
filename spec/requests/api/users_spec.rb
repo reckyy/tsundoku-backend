@@ -17,7 +17,7 @@ RSpec.describe 'API::Users', type: :request do
 
   describe 'API::UsersController#create' do
     context 'registering new user' do
-      it 'return a ok response' do
+      it 'returns a ok response' do
         user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge' }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:ok)
@@ -25,37 +25,45 @@ RSpec.describe 'API::Users', type: :request do
     end
 
     context 'when a user logs in' do
-      it 'return a ok response' do
+      it 'returns a ok response' do
         user_params = { name: @user.name, email: @user.email, avatar_url: @user.avatar_url }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'params is not valid' do
-      it 'return a bad response' do
+    context 'params is invalid' do
+      it 'returns a bad response' do
         user_params = { name: 'hoge', avatar_url: 'https://hogehoge' }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(422)
       end
     end
+  end
 
-    describe 'API::UsersController#show' do
-      context 'params is valid' do
-        it 'return a user_info' do
-          params = { id: @user.id }
-          get("/api/users/#{@user.id}", params:)
-          expect(response).to have_http_status(:ok)
-        end
+  describe 'API::UsersController#show' do
+    context 'params is valid' do
+      it 'returns a user_info' do
+        params = { id: @user.id }
+        get("/api/users/#{@user.id}", params:)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe 'API::UsersController#destroy' do
+    context 'params is valid' do
+      it 'return a nocontent response' do
+        delete("/api/users/#{@user.id}")
+        expect(response).to have_http_status(:no_content)
       end
     end
 
-    describe 'API::UsersController#destroy' do
-      context 'params is valid' do
-        it 'return a nocontent response' do
-          delete("/api/users/#{@user.id}")
-          expect(response).to have_http_status(:no_content)
-        end
+    context 'when destroy fails' do
+      it 'return a bad response' do
+        allow(@user).to receive(:destroy).and_return(false)
+        delete("/api/users/#{@user.id}")
+        expect(response).to have_http_status(422)
       end
     end
   end

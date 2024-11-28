@@ -3,7 +3,5 @@
 class UserBookResource < BaseResource
   attributes :id, :status
 
-  one :book, resource: BookResource do
-    attributes :id, :author, :title
-  end
+  one :book, resource: BookResource
 end

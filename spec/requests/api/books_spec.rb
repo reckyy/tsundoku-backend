@@ -11,15 +11,15 @@ RSpec.describe 'API::Books', type: :request do
 
   describe 'API::BooksController#create' do
     context 'params is valid' do
-      it 'return a successful response' do
+      it 'returns a successful response' do
         params = { title: 'テスト本のタイトル', author: 'テスト本の著者', coverImageUrl: 'http://localhost:3000/testcoverimageurl' }
         post(api_books_path, params:)
         expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'params is not valid' do
-      it 'return a bad response' do
+    context 'params is invalid' do
+      it 'returns a bad response' do
         params = { title: 'テスト本のタイトル', author: 'テスト本の著者' }
         post(api_books_path, params:)
         expect(response).to have_http_status(422)

@@ -29,7 +29,7 @@ module API
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
-        head :unprocessable_entity
+        render json: [error: '本の並び替えに失敗しました。'], status: :unprocessable_entity
       end
     end
 

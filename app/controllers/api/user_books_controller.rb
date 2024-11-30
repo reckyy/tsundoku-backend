@@ -56,7 +56,7 @@ module API
     end
 
     def set_user_book
-      @user_book = UserBook.find(params[:user_book_id])
+      @user_book = UserBook.find(params[:id])
     end
   end
 end

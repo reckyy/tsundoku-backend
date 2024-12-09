@@ -12,6 +12,7 @@ RSpec.describe UserInfoResource, type: :resource do
   end
 
   it 'returns name, books and logs combined' do
+    first_year = @reading_logs.min_by(&:read_date).read_date.year
     user_info_json = UserInfoResource.new(@user).serialize
     expected_user_info_json = {
       name: @user.name,
@@ -31,11 +32,12 @@ RSpec.describe UserInfoResource, type: :resource do
         reading_books: [],
         finished_books: []
       },
-      logs: @reading_logs.sort_by(&:read_date).map do |log|
-        {
-          date: log.read_date.to_s,
-          count: 1
-        }
+      logs: (first_year..Time.current.year).to_a.index_with do |year|
+        @reading_logs
+          .select { |log| log.read_date.year == year }
+          .group_by(&:read_date)
+          .sort
+          .map { |date, logs| { date: date.to_s, count: logs.size } }
       end
     }.to_json
 

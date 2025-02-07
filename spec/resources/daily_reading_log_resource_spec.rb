@@ -30,4 +30,12 @@ RSpec.describe DailyReadingLogResource, type: :resource do
 
     expect(reading_log_json).to eq(expected_reading_log_json)
   end
+
+  it 'returns the empty log when user does not have reading logs' do
+    new_user = FactoryBot.create(:user)
+    reading_log_json = DailyReadingLogResource.new(new_user).serialize
+    expected_reading_log_json = { logs: {} }.to_json
+
+    expect(reading_log_json).to eq(expected_reading_log_json)
+  end
 end

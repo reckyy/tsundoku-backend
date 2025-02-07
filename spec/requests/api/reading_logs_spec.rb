@@ -16,7 +16,12 @@ RSpec.describe 'API::ReadingLogs', type: :request do
       it 'returns logs with date and count set' do
         get(api_reading_logs_path)
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ logs: { "#{@reading_log.read_date.year}": [{ date: @reading_log.read_date.to_s, count: 1 }] } }.to_json)
+        reading_log_year = @reading_log.read_date.year
+        current_year = Time.zone.today.year
+        expected_response_json = { logs: { "#{reading_log_year}": [{ date: @reading_log.read_date.to_s, count: 1 }] } }
+        expected_response_json[:logs][current_year.to_s] = [] if reading_log_year < current_year
+
+        expect(response.body).to eq(expected_response_json.to_json)
       end
     end
   end

@@ -11,7 +11,7 @@ module API
         user_books.status_reading_ordered,
         user_books.status_finished_ordered
       )
-      render json: UserBooksResource.new(categorized_user_books).serialize
+      render json: UserBooksResource.new(categorized_user_books).serializable_hash
     end
 
     def create

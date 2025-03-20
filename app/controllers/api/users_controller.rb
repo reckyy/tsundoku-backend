@@ -7,7 +7,7 @@ module API
 
     def show
       user = User.find(params[:id])
-      render json: UserInfoResource.new(user).serialize
+      render json: UserInfoResource.new(user).serializable_hash
     end
 
     def create

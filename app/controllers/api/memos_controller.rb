@@ -4,8 +4,7 @@ module API
   class MemosController < ApplicationController
     def index
       user_book = UserBook.find_by!(user: current_user, book_id: params[:book_id])
-      user_book_with_memos = UserBookWithMemosResource.new(user_book).serialize
-      render json: user_book_with_memos
+      render json: UserBookWithMemosResource.new(user_book).serializable_hash
     end
 
     def update

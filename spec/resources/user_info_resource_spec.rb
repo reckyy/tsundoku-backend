@@ -13,7 +13,7 @@ RSpec.describe UserInfoResource, type: :resource do
 
   it 'returns name, books and logs combined' do
     first_year = @reading_logs.min_by(&:read_date).read_date.year
-    user_info_json = UserInfoResource.new(@user).serialize
+    user_info_json = UserInfoResource.new(@user).serializable_hash.to_json
     expected_user_info_json = {
       name: @user.name,
       user_books: {

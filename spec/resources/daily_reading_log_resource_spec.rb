@@ -13,7 +13,7 @@ RSpec.describe DailyReadingLogResource, type: :resource do
   end
 
   it 'returns the daily reading logs' do
-    reading_log_json = DailyReadingLogResource.new(@user).serialize
+    reading_log_json = DailyReadingLogResource.new(@user).serializable_hash.to_json
     first_year = @reading_logs.min_by(&:read_date).read_date.year
     expected_reading_log_json = {
       logs: (first_year..Time.current.year).to_a.to_h do |year|
@@ -33,7 +33,7 @@ RSpec.describe DailyReadingLogResource, type: :resource do
 
   it 'returns the empty log when user does not have reading logs' do
     new_user = FactoryBot.create(:user)
-    reading_log_json = DailyReadingLogResource.new(new_user).serialize
+    reading_log_json = DailyReadingLogResource.new(new_user).serializable_hash.to_json
     expected_reading_log_json = { logs: {} }.to_json
 
     expect(reading_log_json).to eq(expected_reading_log_json)

@@ -11,7 +11,7 @@ RSpec.describe UserBooksResource, type: :resource do
   it 'returns user_books' do
     user_books = @user.user_books
     categorized_user_books = CategorizedUserBooks.new(user_books.status_unread, user_books.status_reading, user_books.status_finished)
-    user_books_json = UserBooksResource.new(categorized_user_books).serialize
+    user_books_json = UserBooksResource.new(categorized_user_books).serializable_hash.to_json
     expected_user_books_json = {
       unread_books: @user_books.map do |ub|
         {

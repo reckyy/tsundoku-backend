@@ -8,7 +8,7 @@ RSpec.describe UserBookResource, type: :resource do
   end
 
   it 'returns user_books' do
-    user_book_json = UserBookResource.new(@user_book).serialize
+    user_book_json = UserBookResource.new(@user_book).serializable_hash.to_json
     expected_user_book_json = {
       id: @user_book.id,
       status: @user_book.status,

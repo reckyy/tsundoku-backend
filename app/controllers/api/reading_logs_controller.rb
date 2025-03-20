@@ -3,8 +3,7 @@
 module API
   class ReadingLogsController < ApplicationController
     def index
-      reading_log_json = DailyReadingLogResource.new(current_user).serialize
-      render json: reading_log_json
+      render json: DailyReadingLogResource.new(current_user).serializable_hash
     end
 
     def create

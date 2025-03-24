@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :heading do
-    number { Faker::Number.between(from: 1, to: 10) }
+    sequence(:number) { |n| n }
     title { '章のタイトル' }
   end
 end

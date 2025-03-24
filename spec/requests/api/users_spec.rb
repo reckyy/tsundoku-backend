@@ -17,7 +17,7 @@ RSpec.describe 'API::Users', type: :request do
   describe 'API::UsersController#create' do
     context 'registering new user' do
       it 'returns a ok response' do
-        user_params = { name: 'hoge', email: 'hogehoge@example.com', avatar_url: 'https://hogehoge' }
+        user_params = { name: 'hoge', email: Faker::Internet.email, avatar_url: Faker::Internet.url }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:ok)
       end
@@ -33,7 +33,7 @@ RSpec.describe 'API::Users', type: :request do
 
     context 'params is invalid' do
       it 'returns a bad response' do
-        user_params = { name: 'hoge', avatar_url: 'https://hogehoge' }
+        user_params = { name: 'hoge', avatar_url: Faker::Internet.url }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(422)
       end

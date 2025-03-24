@@ -4,6 +4,6 @@ FactoryBot.define do
   factory :user do
     name { Faker::Name.name }
     email { Faker::Internet.email }
-    avatar_url { 'https://hogehoge-image' }
+    avatar_url { Faker::Internet.url }
   end
 end

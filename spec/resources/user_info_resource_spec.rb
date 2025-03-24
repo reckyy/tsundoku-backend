@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe UserInfoResource, type: :resource do
   before do
     @user = FactoryBot.create(:user)
-    @user_books = FactoryBot.create_list(:user_book, 2, user: @user)
+    books = FactoryBot.create_list(:book, 2)
+    @user_books = books.map { |book| UserBook.create(user: @user, book:) }
     heading = FactoryBot.create(:heading, user_book: @user_books.first)
     memo = FactoryBot.create(:memo, heading:)
     @reading_logs = FactoryBot.create_list(:reading_log, 2, memo:)

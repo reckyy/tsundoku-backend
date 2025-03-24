@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'API::Headings', type: :request do
-  let(:current_user) { @user_book.user }
+  let(:current_user) { FactoryBot.create(:user) }
 
   before do
-    @user_book = FactoryBot.create(:user_book)
+    book = FactoryBot.create(:book)
+    @user_book = UserBook.create(user: current_user, book:)
     @heading = FactoryBot.create(:heading, user_book: @user_book)
     authorization_stub
   end

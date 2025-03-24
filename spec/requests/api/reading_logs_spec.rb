@@ -3,10 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'API::ReadingLogs', type: :request do
-  let(:current_user) { @memo.heading.user_book.user }
+  let(:current_user) { FactoryBot.create(:user) }
 
   before do
-    @memo = FactoryBot.create(:memo)
+    book = FactoryBot.create(:book)
+    user_book = UserBook.create(user: current_user, book:)
+    heading = FactoryBot.create(:heading, user_book:)
+    @memo = FactoryBot.create(:memo, heading:)
     @reading_log = FactoryBot.create(:reading_log, memo: @memo)
     authorization_stub
   end

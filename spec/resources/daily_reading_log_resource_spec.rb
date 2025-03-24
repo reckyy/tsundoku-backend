@@ -6,7 +6,7 @@ RSpec.describe DailyReadingLogResource, type: :resource do
   before do
     @user = FactoryBot.create(:user)
     book = FactoryBot.create(:book)
-    user_book = FactoryBot.create(:user_book, user: @user, book:)
+    user_book = UserBook.create(user: @user, book:)
     heading = FactoryBot.create(:heading, user_book:)
     memo = FactoryBot.create(:memo, heading:)
     @reading_logs = FactoryBot.create_list(:reading_log, 2, memo:)

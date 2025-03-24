@@ -4,7 +4,10 @@ require 'rails_helper'
 
 RSpec.describe HeadingResource, type: :resource do
   before do
-    @heading = FactoryBot.create(:heading)
+    user = FactoryBot.create(:user)
+    book = FactoryBot.create(:book)
+    user_book = UserBook.create(user:, book:)
+    @heading = FactoryBot.create(:heading, user_book:)
     @memo = FactoryBot.create(:memo, heading: @heading)
   end
 

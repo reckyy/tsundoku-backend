@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe UserBookResource, type: :resource do
   before do
-    @user_book = FactoryBot.create(:user_book)
+    user = FactoryBot.create(:user)
+    book = FactoryBot.create(:book)
+    @user_book = UserBook.create(user:, book:)
   end
 
   it 'returns user_books' do

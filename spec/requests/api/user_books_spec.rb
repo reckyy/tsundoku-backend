@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'API::UserBooks', type: :request do
-  let(:current_user) { @user_book.user }
-  let(:book) { FactoryBot.create(:book) }
+  let(:current_user) { FactoryBot.create(:user) }
+  let(:second_book) { FactoryBot.create(:book) }
+  let(:second_user_book) { UserBook.create(user: current_user, book: second_book) }
 
   before do
-    @user_book = FactoryBot.create(:user_book)
+    @book = FactoryBot.create(:book)
+    @user_book = UserBook.create(user: current_user, book: @book)
     authorization_stub
   end
 
@@ -23,6 +25,7 @@ RSpec.describe 'API::UserBooks', type: :request do
   describe 'API::UserBooksController#create' do
     context 'params is valid' do
       it 'returns a successful response' do
+        book = FactoryBot.create(:book)
         params = { title: book.title, author: book.author, coverImageUrl: book.cover_image_url }
         post(api_user_books_path, params:)
         expect(response).to have_http_status(:ok)
@@ -32,7 +35,7 @@ RSpec.describe 'API::UserBooks', type: :request do
     context 'params is invalid' do
       it 'returns a bad response' do
         allow_any_instance_of(UserBook).to receive(:save_with_heading).and_return(false)
-        params = { title: book.title, author: book.author, coverImageUrl: book.cover_image_url }
+        params = { title: @book.title, author: @book.author, coverImageUrl: @book.cover_image_url }
         post(api_user_books_path, params:)
         expect(response).to have_http_status(422)
       end
@@ -43,7 +46,6 @@ RSpec.describe 'API::UserBooks', type: :request do
     context 'params is valid' do
       it 'succeeds in swaping the position' do
         expect(@user_book.position).to eq(1)
-        second_user_book = FactoryBot.create(:user_book, user: @user_book.user)
         expect(second_user_book.position).to eq(2)
         params = { user_book_id: @user_book.id, destination_book_id: second_user_book.id }
         patch(position_api_user_book_path(@user_book.id), params:)
@@ -56,7 +58,6 @@ RSpec.describe 'API::UserBooks', type: :request do
     context 'params is invalid' do
       it 'fails in swaping the position' do
         allow_any_instance_of(UserBook).to receive(:swap_positions_with).and_return(false)
-        second_user_book = FactoryBot.create(:user_book, user: @user_book.user)
         params = { user_book_id: @user_book.id, destination_book_id: second_user_book.id }
         patch(position_api_user_book_path(@user_book.id), params:)
         expect(response).to have_http_status(422)

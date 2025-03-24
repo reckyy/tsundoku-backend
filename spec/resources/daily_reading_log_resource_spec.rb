@@ -8,26 +8,26 @@ RSpec.describe DailyReadingLogResource, type: :resource do
     book = FactoryBot.create(:book)
     user_book = UserBook.create(user: @user, book:)
     heading = FactoryBot.create(:heading, user_book:)
-    memo = FactoryBot.create(:memo, heading:)
-    @reading_logs = FactoryBot.create_list(:reading_log, 2, memo:)
+    @memo = FactoryBot.create(:memo, heading:)
   end
 
   it 'returns the daily reading logs' do
+    last_year = 1.year.ago
+    last_year_reading_log = ReadingLog.create(memo: @memo, read_date: last_year)
+    reading_log = FactoryBot.create(:reading_log, memo: @memo)
     reading_log_json = DailyReadingLogResource.new(@user).serializable_hash.to_json
-    first_year = @reading_logs.min_by(&:read_date).read_date.year
     expected_reading_log_json = {
-      logs: (first_year..Time.current.year).to_a.to_h do |year|
-        [
-          year.to_s,
-          @reading_logs
-            .select { |log| log.read_date.year == year }
-            .group_by(&:read_date)
-            .sort
-            .map { |date, logs| { date: date.to_s, count: logs.size } }
+      logs: {
+        last_year_reading_log.read_date.year.to_s => [
+          date: last_year_reading_log.read_date,
+          count: 1
+        ],
+        reading_log.read_date.year.to_s => [
+          date: reading_log.read_date,
+          count: 1
         ]
-      end
+      }
     }.to_json
-
     expect(reading_log_json).to eq(expected_reading_log_json)
   end
 

@@ -9,11 +9,10 @@ RSpec.describe UserInfoResource, type: :resource do
     @user_books = books.map { |book| UserBook.create(user: @user, book:) }
     heading = FactoryBot.create(:heading, user_book: @user_books.first)
     memo = FactoryBot.create(:memo, heading:)
-    @reading_logs = FactoryBot.create_list(:reading_log, 2, memo:)
+    @reading_log = FactoryBot.create(:reading_log, memo:)
   end
 
   it 'returns name, books and logs combined' do
-    first_year = @reading_logs.min_by(&:read_date).read_date.year
     user_info_json = UserInfoResource.new(@user).serializable_hash.to_json
     expected_user_info_json = {
       name: @user.name,
@@ -33,13 +32,12 @@ RSpec.describe UserInfoResource, type: :resource do
         reading_books: [],
         finished_books: []
       },
-      logs: (first_year..Time.current.year).to_a.index_with do |year|
-        @reading_logs
-          .select { |log| log.read_date.year == year }
-          .group_by(&:read_date)
-          .sort
-          .map { |date, logs| { date: date.to_s, count: logs.size } }
-      end
+      logs: {
+        @reading_log.read_date.year.to_s => [
+          date: @reading_log.read_date,
+          count: 1
+        ]
+      }
     }.to_json
 
     expect(user_info_json).to eq(expected_user_info_json)

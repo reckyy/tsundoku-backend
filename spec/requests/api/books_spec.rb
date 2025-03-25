@@ -13,7 +13,7 @@ RSpec.describe 'API::Books', type: :request do
     context 'params is valid' do
       it 'returns a successful response' do
         params = { title: 'テスト本のタイトル', author: 'テスト本の著者', coverImageUrl: Faker::Internet.url }
-        post(api_books_path, params:)
+        expect { post(api_books_path, params:) }.to change { Book.count }.by(1)
         expect(response).to have_http_status(:ok)
       end
     end

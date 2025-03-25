@@ -7,10 +7,10 @@ RSpec.describe 'API::ReadingLogs', type: :request do
 
   before do
     book = FactoryBot.create(:book)
-    user_book = UserBook.create(user: current_user, book:)
-    heading = FactoryBot.create(:heading, user_book:)
-    @memo = FactoryBot.create(:memo, heading:)
-    FactoryBot.create(:reading_log, memo: @memo)
+    @user_book = UserBook.create(user: current_user, book:)
+    heading = FactoryBot.create(:heading, user_book: @user_book)
+    memo = FactoryBot.create(:memo, heading:)
+    FactoryBot.create(:reading_log, memo:)
     authorization_stub
   end
 
@@ -26,8 +26,10 @@ RSpec.describe 'API::ReadingLogs', type: :request do
   describe 'API::ReadingLogsController#create' do
     context 'params is valid' do
       it 'returns a successful response' do
-        params = { memo_id: @memo.id }
-        post(api_reading_logs_path, params:)
+        new_heading = FactoryBot.create(:heading, user_book: @user_book)
+        new_memo = FactoryBot.create(:memo, heading: new_heading)
+        params = { memo_id: new_memo.id }
+        expect { post(api_reading_logs_path, params:) }.to change { ReadingLog.count }.by(1)
         expect(response).to have_http_status(:ok)
       end
     end

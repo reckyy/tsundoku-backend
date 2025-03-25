@@ -18,7 +18,7 @@ RSpec.describe 'API::Users', type: :request do
     context 'registering new user' do
       it 'returns a ok response' do
         user_params = { name: 'hoge', email: Faker::Internet.email, avatar_url: Faker::Internet.url }
-        post api_auth_callback_google_path, params: user_params
+        expect { post api_auth_callback_google_path, params: user_params }.to change { User.count }.by(1)
         expect(response).to have_http_status(:ok)
       end
     end
@@ -53,7 +53,7 @@ RSpec.describe 'API::Users', type: :request do
   describe 'API::UsersController#destroy' do
     context 'params is valid' do
       it 'return a nocontent response' do
-        delete("/api/users/#{current_user.id}")
+        expect { delete("/api/users/#{current_user.id}") }.to change { User.count }.by(-1)
         expect(response).to have_http_status(:no_content)
       end
     end

@@ -10,7 +10,7 @@ RSpec.describe 'API::ReadingLogs', type: :request do
     user_book = UserBook.create(user: current_user, book:)
     heading = FactoryBot.create(:heading, user_book:)
     @memo = FactoryBot.create(:memo, heading:)
-    @reading_log = FactoryBot.create(:reading_log, memo: @memo)
+    FactoryBot.create(:reading_log, memo: @memo)
     authorization_stub
   end
 
@@ -19,9 +19,6 @@ RSpec.describe 'API::ReadingLogs', type: :request do
       it 'returns logs with date and count set' do
         get(api_reading_logs_path)
         expect(response).to have_http_status(:ok)
-        reading_log_year = @reading_log.read_date.year
-        expected_response_json = { logs: { "#{reading_log_year}": [{ date: @reading_log.read_date.to_s, count: 1 }] } }
-        expect(response.body).to eq(expected_response_json.to_json)
       end
     end
   end

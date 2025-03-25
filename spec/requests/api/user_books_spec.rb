@@ -27,7 +27,7 @@ RSpec.describe 'API::UserBooks', type: :request do
       it 'returns a successful response' do
         book = FactoryBot.create(:book)
         params = { title: book.title, author: book.author, coverImageUrl: book.cover_image_url }
-        post(api_user_books_path, params:)
+        expect { post(api_user_books_path, params:) }.to change { UserBook.count }.by(1)
         expect(response).to have_http_status(:ok)
       end
     end
@@ -71,6 +71,8 @@ RSpec.describe 'API::UserBooks', type: :request do
         params = { user_book_id: @user_book.id, status: 'reading' }
         patch(api_user_book_path(@user_book.id), params:)
         expect(response).to have_http_status(:ok)
+        @user_book.reload
+        expect(@user_book.status).to eq('reading')
       end
     end
 
@@ -88,7 +90,7 @@ RSpec.describe 'API::UserBooks', type: :request do
     context 'params is valid' do
       it 'returns a nocontent response' do
         params = { user_book_id: @user_book.id }
-        delete(api_user_book_path(@user_book.id), params:)
+        expect { delete(api_user_book_path(@user_book.id), params:) }.to change { UserBook.count }.by(-1)
         expect(response).to have_http_status(:no_content)
       end
     end
@@ -97,7 +99,7 @@ RSpec.describe 'API::UserBooks', type: :request do
       it 'returns a bad response' do
         allow_any_instance_of(UserBook).to receive(:destroy).and_return(false)
         params = { user_book_id: @user_book.id }
-        delete(api_user_book_path(@user_book.id), params:)
+        expect { delete(api_user_book_path(@user_book.id), params:) }.not_to(change { UserBook.count })
         expect(response).to have_http_status(422)
       end
     end

@@ -17,10 +17,8 @@ RSpec.describe 'API::Headings', type: :request do
       it 'succeeds adding heading' do
         expect(@user_book.headings.length).to eq(1)
         params = { user_book_id: @user_book.id, number: 2 }
-        post(api_headings_path, params:)
+        expect { post(api_headings_path, params:) }.to change { Heading.count }.by(1)
         expect(response).to have_http_status(:ok)
-        @user_book.reload
-        expect(@user_book.headings.length).to eq(2)
       end
     end
 

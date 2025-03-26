@@ -3,19 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe DailyReadingLogResource, type: :resource do
-  before do
-    @user = FactoryBot.create(:user)
-    book = FactoryBot.create(:book)
-    user_book = UserBook.create(user: @user, book:)
-    heading = FactoryBot.create(:heading, user_book:)
-    @memo = FactoryBot.create(:memo, heading:)
-  end
-
   it 'returns the daily reading logs' do
+    user = FactoryBot.create(:user)
+    book = FactoryBot.create(:book)
+    user_book = UserBook.create(user:, book:)
+    heading = FactoryBot.create(:heading, user_book:)
+    memo = FactoryBot.create(:memo, heading:)
     last_year = 1.year.ago
-    last_year_reading_log = ReadingLog.create(memo: @memo, read_date: last_year)
-    reading_log = FactoryBot.create(:reading_log, memo: @memo)
-    reading_log_json = DailyReadingLogResource.new(@user).serializable_hash.to_json
+    last_year_reading_log = ReadingLog.create(memo:, read_date: last_year)
+    reading_log = FactoryBot.create(:reading_log, memo:)
+    reading_log_json = DailyReadingLogResource.new(user).serializable_hash.to_json
     expected_reading_log_json = {
       logs: {
         last_year_reading_log.read_date.year.to_s => [

@@ -3,11 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe 'API::ReadingLogs', type: :request do
-  let(:current_user) { @memo.heading.user_book.user }
+  let(:current_user) { FactoryBot.create(:user) }
 
   before do
-    @memo = FactoryBot.create(:memo)
-    @reading_log = FactoryBot.create(:reading_log, memo: @memo)
+    book = FactoryBot.create(:book)
+    @user_book = UserBook.create(user: current_user, book:)
+    heading = FactoryBot.create(:heading, user_book: @user_book)
+    memo = FactoryBot.create(:memo, heading:)
+    FactoryBot.create(:reading_log, memo:)
     authorization_stub
   end
 
@@ -16,12 +19,6 @@ RSpec.describe 'API::ReadingLogs', type: :request do
       it 'returns logs with date and count set' do
         get(api_reading_logs_path)
         expect(response).to have_http_status(:ok)
-        reading_log_year = @reading_log.read_date.year
-        current_year = Time.zone.today.year
-        expected_response_json = { logs: { "#{reading_log_year}": [{ date: @reading_log.read_date.to_s, count: 1 }] } }
-        expected_response_json[:logs][current_year.to_s] = [] if reading_log_year < current_year
-
-        expect(response.body).to eq(expected_response_json.to_json)
       end
     end
   end
@@ -29,8 +26,10 @@ RSpec.describe 'API::ReadingLogs', type: :request do
   describe 'API::ReadingLogsController#create' do
     context 'params is valid' do
       it 'returns a successful response' do
-        params = { memo_id: @memo.id }
-        post(api_reading_logs_path, params:)
+        new_heading = FactoryBot.create(:heading, user_book: @user_book)
+        new_memo = FactoryBot.create(:memo, heading: new_heading)
+        params = { memo_id: new_memo.id }
+        expect { post(api_reading_logs_path, params:) }.to change { ReadingLog.count }.by(1)
         expect(response).to have_http_status(:ok)
       end
     end

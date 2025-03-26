@@ -3,6 +3,5 @@
 FactoryBot.define do
   factory :memo do
     sequence(:body) { |n| "本#{n}のメモ" }
-    heading
   end
 end

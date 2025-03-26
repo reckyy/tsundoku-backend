@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'API::Headings', type: :request do
-  let(:current_user) { @user_book.user }
+  let(:current_user) { FactoryBot.create(:user) }
 
   before do
-    @user_book = FactoryBot.create(:user_book)
+    book = FactoryBot.create(:book)
+    @user_book = UserBook.create(user: current_user, book:)
     @heading = FactoryBot.create(:heading, user_book: @user_book)
     authorization_stub
   end
@@ -14,12 +15,9 @@ RSpec.describe 'API::Headings', type: :request do
   describe 'API::HeadingsController#create' do
     context 'params is valid' do
       it 'succeeds adding heading' do
-        expect(@user_book.headings.length).to eq(1)
         params = { user_book_id: @user_book.id, number: 2 }
-        post(api_headings_path, params:)
+        expect { post(api_headings_path, params:) }.to change { Heading.count }.by(1)
         expect(response).to have_http_status(:ok)
-        @user_book.reload
-        expect(@user_book.headings.length).to eq(2)
       end
     end
 
@@ -34,10 +32,12 @@ RSpec.describe 'API::Headings', type: :request do
 
   describe 'API::HeadingsController#update' do
     context 'params is valid' do
-      it 'returns a successful response' do
+      it 'succeeds updating heading title' do
         params = { id: @heading.id, title: '更新後のタイトル' }
         patch(api_heading_path(@heading.id), params:)
         expect(response).to have_http_status(:ok)
+        @heading.reload
+        expect(@heading.title).to eq('更新後のタイトル')
       end
     end
 

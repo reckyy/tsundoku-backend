@@ -3,12 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'API::Memos', type: :request do
-  let(:current_user) { @memo.heading.user_book.user }
+  let(:current_user) { FactoryBot.create(:user) }
 
   before do
-    reading_log = FactoryBot.create(:reading_log)
-    @memo = reading_log.memo
-    @book = @memo.heading.user_book.book
+    @book = FactoryBot.create(:book)
+    user_book = UserBook.create(user: current_user, book: @book)
+    heading = FactoryBot.create(:heading, user_book:)
+    @memo = FactoryBot.create(:memo, heading:)
     authorization_stub
   end
 

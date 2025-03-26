@@ -13,8 +13,8 @@ class ApplicationController < ActionController::API
   def authenticate
     token = request.headers[:Authorization]&.split&.last
     secret_key = ENV.fetch('SECRET_KEY_BASE')
-    decoded_token = JWT.decode(token, secret_key, 'HS256')
-    if decoded_token
+    if token.present?
+      decoded_token = JWT.decode(token, secret_key, 'HS256')
       @current_user = User.find(decoded_token[0]['id'])
     else
       render json: { errors: ['Not Authenticated'] }, status: :unauthorized

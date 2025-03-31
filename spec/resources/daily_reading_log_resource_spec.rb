@@ -16,11 +16,11 @@ RSpec.describe DailyReadingLogResource, type: :resource do
     expected_reading_log_json = {
       logs: {
         last_year_reading_log.read_date.year.to_s => [
-          date: last_year_reading_log.read_date,
+          date: last_year_reading_log.read_date.to_s,
           count: 1
         ],
         reading_log.read_date.year.to_s => [
-          date: reading_log.read_date,
+          date: reading_log.read_date.to_s,
           count: 1
         ]
       }

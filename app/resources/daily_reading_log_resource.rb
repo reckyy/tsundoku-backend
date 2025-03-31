@@ -3,19 +3,20 @@
 class DailyReadingLogResource < BaseResource
   attribute :logs do |user|
     reading_logs = user.reading_logs
-    first_reading_log = reading_logs.first
 
-    if first_reading_log
-      years = (first_reading_log.read_date.year..Time.current.year).to_a
-      years.index_with do |year|
-        reading_logs
-          .where(read_date: Time.zone.local(year).all_year)
-          .group(:read_date)
-          .count
-          .map { |date, count| { date: date.to_s, count: } }
-      end
-    else
+    if reading_logs.empty?
       {}
+    else
+      daily_counts = reading_logs
+                     .group(:read_date)
+                     .count
+                     .transform_keys(&:to_date)
+      logs_by_year = daily_counts.group_by { |date, _| date.year }
+      logs_by_year[Time.current.year] ||= []
+
+      logs_by_year.transform_values do |logs|
+        logs.map { |date, count| { date: date.to_s, count: } }
+      end
     end
   end
 end

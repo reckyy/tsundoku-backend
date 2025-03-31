@@ -55,7 +55,7 @@ RSpec.describe UserInfoResource, type: :resource do
       logs: {
         reading_log.read_date.year.to_s => [
           {
-            date: reading_log.read_date,
+            date: reading_log.read_date.to_s,
             count: 1
           }
         ]

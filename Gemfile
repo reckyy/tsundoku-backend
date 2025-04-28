@@ -12,7 +12,7 @@ gem 'jwt'
 gem 'pg'
 gem 'puma', '>= 5.0'
 gem 'rack-cors'
-gem 'rails', '7.2.2.1'
+gem 'rails', '8.0.2'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do

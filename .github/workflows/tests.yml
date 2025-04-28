@@ -13,7 +13,7 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.5
+          ruby-version: 3.4.3
           bundler-cache: true
       - name: Lint
         run: bundle exec rubocop
@@ -39,7 +39,7 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.5
+          ruby-version: 3.4.3
           bundler-cache: true
       - name: Set up database schema
         run: bin/rails db:schema:load

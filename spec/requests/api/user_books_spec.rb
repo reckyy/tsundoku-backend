@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'API::UserBooks', type: :request do
   let(:current_user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
   let(:second_book) { FactoryBot.create(:book) }
   let(:second_user_book) { UserBook.create(user: current_user, book: second_book) }
 
@@ -63,6 +64,17 @@ RSpec.describe 'API::UserBooks', type: :request do
         expect(response).to have_http_status(422)
       end
     end
+
+    context 'when the destination user_book belongs to another user' do
+      it 'returns not found' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        params = { user_book_id: @user_book.id, destination_book_id: other_user_book.id }
+
+        patch(position_api_user_book_path(@user_book.id), params:)
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe 'API::UserBooksController#update' do
@@ -84,6 +96,18 @@ RSpec.describe 'API::UserBooks', type: :request do
         expect(response).to have_http_status(422)
       end
     end
+
+    context 'when the user_book belongs to another user' do
+      it 'returns not found' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        params = { user_book_id: other_user_book.id, status: 'reading' }
+
+        patch(api_user_book_path(other_user_book.id), params:)
+
+        expect(response).to have_http_status(:not_found)
+        expect(other_user_book.reload.status).not_to eq('reading')
+      end
+    end
   end
 
   describe 'API::UserBooksController#destroy' do
@@ -101,6 +125,16 @@ RSpec.describe 'API::UserBooks', type: :request do
         params = { user_book_id: @user_book.id }
         expect { delete(api_user_book_path(@user_book.id), params:) }.not_to(change { UserBook.count })
         expect(response).to have_http_status(422)
+      end
+    end
+
+    context 'when the user_book belongs to another user' do
+      it 'returns not found' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        params = { user_book_id: other_user_book.id }
+
+        expect { delete(api_user_book_path(other_user_book.id), params:) }.not_to(change { UserBook.count })
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

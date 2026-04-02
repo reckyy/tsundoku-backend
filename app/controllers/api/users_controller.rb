@@ -32,7 +32,7 @@ module API
     private
 
     def user_params
-      params.permit(:id, :name, :email, :avatar_url)
+      params.permit(:name, :email, :avatar_url)
     end
 
     def encode_jwt(payload)

@@ -8,7 +8,7 @@ module API
     end
 
     def update
-      memo = Memo.find(params[:id])
+      memo = current_user.memos.find(params[:id])
       if memo.update(body: params[:body])
         head :ok
       else

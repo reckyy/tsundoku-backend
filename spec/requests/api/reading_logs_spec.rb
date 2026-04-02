@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'API::ReadingLogs', type: :request do
   let(:current_user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
 
   before do
     book = FactoryBot.create(:book)
@@ -35,10 +36,22 @@ RSpec.describe 'API::ReadingLogs', type: :request do
     end
 
     context 'params is invalid' do
-      it 'returns a bad response' do
+      it 'returns not found' do
         params = { memo_id: -1 }
         post(api_reading_logs_path, params:)
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the memo belongs to another user' do
+      it 'returns not found' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        other_heading = FactoryBot.create(:heading, user_book: other_user_book)
+        other_memo = FactoryBot.create(:memo, heading: other_heading)
+        params = { memo_id: other_memo.id }
+
+        expect { post(api_reading_logs_path, params:) }.not_to(change { ReadingLog.count })
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

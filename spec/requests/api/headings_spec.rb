@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'API::Headings', type: :request do
   let(:current_user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
 
   before do
     book = FactoryBot.create(:book)
@@ -22,10 +23,20 @@ RSpec.describe 'API::Headings', type: :request do
     end
 
     context 'params is invalid' do
-      it 'returns a bad response' do
+      it 'returns not found' do
         params = { user_book_id: -1, number: 2 }
         post(api_headings_path, params:)
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the user_book belongs to another user' do
+      it 'returns not found' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        params = { user_book_id: other_user_book.id, number: 2 }
+
+        expect { post(api_headings_path, params:) }.not_to(change { Heading.count })
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -47,6 +58,19 @@ RSpec.describe 'API::Headings', type: :request do
         params = { id: @heading.id, title: '更新後のタイトル' }
         patch(api_heading_path(@heading.id), params:)
         expect(response).to have_http_status(422)
+      end
+    end
+
+    context 'when the heading belongs to another user' do
+      it 'returns not found' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        other_heading = FactoryBot.create(:heading, user_book: other_user_book)
+        params = { id: other_heading.id, title: '更新後のタイトル' }
+
+        patch(api_heading_path(other_heading.id), params:)
+
+        expect(response).to have_http_status(:not_found)
+        expect(other_heading.reload.title).not_to eq('更新後のタイトル')
       end
     end
   end

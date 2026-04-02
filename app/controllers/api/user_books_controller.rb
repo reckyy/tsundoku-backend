@@ -25,7 +25,7 @@ module API
     end
 
     def position
-      destination_user_book = UserBook.find(params[:destination_book_id])
+      destination_user_book = current_user.user_books.find(params[:destination_book_id])
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
@@ -56,7 +56,7 @@ module API
     end
 
     def set_user_book
-      @user_book = UserBook.find(params[:id])
+      @user_book = current_user.user_books.find(params[:id])
     end
   end
 end

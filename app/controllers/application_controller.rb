@@ -12,17 +12,21 @@ class ApplicationController < ActionController::API
 
   def authenticate
     token = request.headers[:Authorization]&.split&.last
+    return render_unauthorized if token.blank?
+
     secret_key = ENV.fetch('SECRET_KEY_BASE')
-    if token.present?
-      decoded_token = JWT.decode(token, secret_key, 'HS256')
-      @current_user = User.find(decoded_token[0]['id'])
-    else
-      render json: { errors: ['Not Authenticated'] }, status: :unauthorized
-    end
+    decoded_token = JWT.decode(token, secret_key, true, algorithm: 'HS256')
+    @current_user = User.find(decoded_token[0]['id'])
+  rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+    render_unauthorized
   end
 
   def camel2snake_params
     params.deep_transform_keys!(&:underscore)
+  end
+
+  def render_unauthorized
+    render json: { errors: ['Not Authenticated'] }, status: :unauthorized
   end
 
   def verify_google_id_token

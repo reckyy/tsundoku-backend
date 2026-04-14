@@ -2,6 +2,8 @@
 
 module API
   class UsersController < ApplicationController
+    JWT_EXPIRATION = 30.days
+
     before_action :verify_google_id_token, only: %i[create]
     skip_before_action :authenticate, only: %i[show create]
 
@@ -14,8 +16,14 @@ module API
       user = User.find_or_create_by(user_params)
 
       if user.persisted?
-        encoded_token = encode_jwt({ id: user.id })
-        render json: { id: user.id, access_token: encoded_token }
+        access_token_expires_at = JWT_EXPIRATION.from_now
+        encoded_token = encode_jwt({ id: user.id, exp: access_token_expires_at.to_i })
+
+        render json: {
+          id: user.id,
+          access_token: encoded_token,
+          access_token_expires_at: access_token_expires_at.iso8601
+        }
       else
         render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
       end

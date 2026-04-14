@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
     secret_key = ENV.fetch('SECRET_KEY_BASE')
     decoded_token = JWT.decode(token, secret_key, true, algorithm: 'HS256')
     @current_user = User.find(decoded_token[0]['id'])
-  rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+  rescue JWT::ExpiredSignature, JWT::DecodeError, ActiveRecord::RecordNotFound
     render_unauthorized
   end
 

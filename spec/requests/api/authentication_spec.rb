@@ -31,8 +31,17 @@ RSpec.describe 'Authentication', type: :request do
       expect(response.parsed_body).to eq('errors' => ['Not Authenticated'])
     end
 
+    it 'returns unauthorized when the token is expired' do
+      token = JWT.encode({ id: user.id, exp: 1.minute.ago.to_i }, secret_key, 'HS256')
+
+      get api_reading_logs_path, headers: { Authorization: "Bearer #{token}" }
+
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.parsed_body).to eq('errors' => ['Not Authenticated'])
+    end
+
     it 'returns ok when the token is valid' do
-      token = JWT.encode({ id: user.id }, secret_key, 'HS256')
+      token = JWT.encode({ id: user.id, exp: 30.days.from_now.to_i }, secret_key, 'HS256')
 
       get api_reading_logs_path, headers: { Authorization: "Bearer #{token}" }
 

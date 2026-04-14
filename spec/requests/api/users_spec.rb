@@ -20,6 +20,8 @@ RSpec.describe 'API::Users', type: :request do
         user_params = { name: 'hoge', email: Faker::Internet.email, avatar_url: Faker::Internet.url }
         expect { post api_auth_callback_google_path, params: user_params }.to change { User.count }.by(1)
         expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['access_token']).to be_present
+        expect(response.parsed_body['access_token_expires_at']).to be_present
       end
     end
 
@@ -28,6 +30,8 @@ RSpec.describe 'API::Users', type: :request do
         user_params = { name: current_user.name, email: current_user.email, avatar_url: current_user.avatar_url }
         post api_auth_callback_google_path, params: user_params
         expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['access_token']).to be_present
+        expect(response.parsed_body['access_token_expires_at']).to be_present
       end
     end
 

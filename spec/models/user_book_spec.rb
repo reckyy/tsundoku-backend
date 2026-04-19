@@ -23,6 +23,19 @@ RSpec.describe UserBook, type: :model do
       expect(second_user_book.position).to eq(1)
       expect(first_user_book.position).to eq(2)
     end
+
+    it 'rolls back when swapping the position fails halfway through' do
+      first_book = FactoryBot.create(:book)
+      second_book = FactoryBot.create(:book)
+      first_user_book = UserBook.create(user: current_user, book: first_book)
+      second_user_book = UserBook.create(user: current_user, book: second_book)
+
+      allow(first_user_book).to receive(:set_list_position).and_raise(ActiveRecord::ActiveRecordError)
+
+      expect(first_user_book.swap_positions_with(second_user_book)).to eq(false)
+      expect(first_user_book.reload.position).to eq(1)
+      expect(second_user_book.reload.position).to eq(2)
+    end
   end
 
   describe '#save_with_heading' do
@@ -35,6 +48,17 @@ RSpec.describe UserBook, type: :model do
     context 'when save is failed' do
       it 'returns false and book, user_book and headings are not saved' do
         allow(user_book).to receive(:save_with_heading).and_return(false)
+        expect(user_book.save_with_heading).to eq(false)
+        expect(UserBook.exists?(user: current_user, book:)).to eq(false)
+      end
+    end
+
+    context 'when heading creation fails' do
+      it 'returns false and does not leave the user_book behind' do
+        headings = instance_double(ActiveRecord::Associations::CollectionProxy)
+        allow(user_book).to receive(:headings).and_return(headings)
+        allow(headings).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(Heading.new))
+
         expect(user_book.save_with_heading).to eq(false)
         expect(UserBook.exists?(user: current_user, book:)).to eq(false)
       end

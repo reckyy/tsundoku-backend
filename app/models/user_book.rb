@@ -16,13 +16,23 @@ class UserBook < ApplicationRecord
   scope :status_finished_ordered, -> { status_finished.order(:position) }
 
   def swap_positions_with(item)
-    item_position = item.position
-
-    item.set_list_position(position)
-    set_list_position(item_position)
+    transaction do
+      item_position = item.position
+      item.set_list_position(position, true)
+      set_list_position(item_position, true)
+    end
+    true
+  rescue ActiveRecord::ActiveRecordError
+    false
   end
 
   def save_with_heading
-    save && headings.create!(number: 1, title: '', memo_attributes: {})
+    transaction do
+      save!
+      headings.create!(number: 1, title: '', memo_attributes: {})
+    end
+    true
+  rescue ActiveRecord::ActiveRecordError
+    false
   end
 end

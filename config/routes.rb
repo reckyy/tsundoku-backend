@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :memos, only: %i[index update]
     resources :reading_logs, only: %i[index create]
     resources :headings, only: %i[create update]
-    resources :users, only: %i[show update destroy]
+    resources :users, only: %i[show destroy]
     resources :user_books, only: %i[index create update destroy] do
       member do
         patch :position

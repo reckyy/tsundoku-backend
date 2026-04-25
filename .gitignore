@@ -34,3 +34,13 @@
 
 #simplecov
 /coverage/
+
+# Jujutsu: 追跡させたくない一時ファイルはここに置く
+.tmp/
+
+# Claude Code / Codex がセッションごとに生成する動的ファイル
+.claude/projects/
+.claude/todos/
+.claude/settings.local.json
+.codex/sessions/
+.codex/log/

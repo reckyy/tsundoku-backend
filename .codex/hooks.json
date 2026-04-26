@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [{ "type": "command", "command": "jj fix", "timeout": 600 }]
+      }
+    ]
+  }
+}

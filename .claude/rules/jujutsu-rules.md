@@ -107,7 +107,7 @@ jj op log --ignore-working-copy            # 操作履歴の表示
 1. `jj log --ignore-working-copy -r @` で現在の change を確認する。
 2. description が空かつ diff が空（empty）なら → `jj describe -m "<description>"` のように description を設定して作業開始。
 3. それ以外（すでに作業中 or 完了済み）→ `jj new -m "<description>"` で新しい change を作成。
-4. description は Conventional Commits 形式に従い、英語で記述すること。
+4. description は `prefix: 日本語の内容` 形式（例: `feat: フォームバリデーションを追加`）。
 
 ### 3. 変更操作後の conflict 確認
 

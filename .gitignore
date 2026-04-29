@@ -38,9 +38,17 @@
 # Jujutsu: 追跡させたくない一時ファイルはここに置く
 .tmp/
 
-# Claude Code / Codex がセッションごとに生成する動的ファイル
-.claude/projects/
-.claude/todos/
-.claude/settings.local.json
-.codex/sessions/
-.codex/log/
+# AI エージェント関連: ホワイトリスト方式
+# 動的生成ファイルが増えても自動で無視される
+
+# .claude: 全部無視 → 必要なものだけ復活
+.claude/*
+!.claude/settings.json
+!.claude/rules/
+
+# .codex: 全部無視 → 必要なものだけ復活
+.codex/*
+!.codex/config.toml
+!.codex/hooks.json
+!.codex/rules/
+!.codex/skills/

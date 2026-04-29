@@ -47,7 +47,8 @@ RSpec.describe UserBook, type: :model do
 
     context 'when save is failed' do
       it 'returns false and book, user_book and headings are not saved' do
-        allow(user_book).to receive(:save_with_heading).and_return(false)
+        allow(user_book).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(user_book))
+
         expect(user_book.save_with_heading).to eq(false)
         expect(UserBook.exists?(user: current_user, book:)).to eq(false)
       end

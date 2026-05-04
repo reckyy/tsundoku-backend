@@ -10,7 +10,7 @@ gem 'dotenv-rails'
 gem 'googleauth'
 gem 'jwt'
 gem 'pg'
-gem 'puma', '>= 5.0'
+gem 'puma', '>= 6.4', '< 7'
 gem 'rack-cors'
 gem 'rails', '8.0.2'
 gem 'tzinfo-data', platforms: %i[windows jruby]

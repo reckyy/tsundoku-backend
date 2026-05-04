@@ -306,7 +306,7 @@ DEPENDENCIES
   googleauth
   jwt
   pg
-  puma (>= 5.0)
+  puma (>= 6.4, < 7)
   rack-cors
   rails (= 8.0.2)
   rspec-rails

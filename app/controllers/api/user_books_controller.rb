@@ -15,7 +15,9 @@ module API
     end
 
     def create
-      book = Book.find_by!(book_params)
+      book = Book.find_or_create_by(book_params)
+      return render json: { error: '本の登録に失敗しました。' }, status: :unprocessable_entity unless book.persisted?
+
       user_book = UserBook.new(book:, user: current_user)
       if user_book.save_with_heading
         head :ok

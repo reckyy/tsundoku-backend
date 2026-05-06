@@ -10,9 +10,9 @@ module API
       memo = current_user.memos.find(params[:memo_id])
       reading_log = ReadingLog.find_or_create_by(memo:, read_date: Time.zone.today)
       if reading_log.persisted?
-        head :ok
+        head :created
       else
-        render json: { error: 'ログの登録に失敗しました' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
   end

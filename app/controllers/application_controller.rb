@@ -26,7 +26,7 @@ class ApplicationController < ActionController::API
   end
 
   def render_unauthorized
-    render json: { errors: ['Not Authenticated'] }, status: :unauthorized
+    head :unauthorized
   end
 
   def verify_google_id_token
@@ -35,8 +35,8 @@ class ApplicationController < ActionController::API
 
     begin
       Google::Auth::IDTokens.verify_oidc(params[:id_token], aud: audience, iss: issuer)
-    rescue Google::Auth::IDTokens::VerificationError => e
-      render json: { errors: ["Not Authenticated #{e.message}"] }, status: :unauthorized
+    rescue Google::Auth::IDTokens::VerificationError
+      head :unauthorized
     end
   end
 end

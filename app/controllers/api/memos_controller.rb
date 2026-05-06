@@ -12,7 +12,7 @@ module API
       if memo.update(body: params[:body])
         head :ok
       else
-        render json: { error: 'メモの登録に失敗しました' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
   end

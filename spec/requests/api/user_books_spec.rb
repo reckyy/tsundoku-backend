@@ -31,7 +31,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         expect { post(api_user_books_path, params:) }
           .to change { UserBook.count }.by(1)
           .and change { Book.count }.by(0)
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:created)
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         expect { post(api_user_books_path, params:) }
           .to change { Book.count }.by(1)
           .and change { UserBook.count }.by(1)
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:created)
       end
     end
 

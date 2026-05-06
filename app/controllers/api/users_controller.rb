@@ -25,7 +25,7 @@ module API
           access_token_expires_at: access_token_expires_at.iso8601
         }
       else
-        render json: { error: 'ログインに失敗しました' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 
@@ -33,7 +33,7 @@ module API
       if current_user.destroy
         head :no_content
       else
-        render json: { error: '退会に失敗しました。' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 

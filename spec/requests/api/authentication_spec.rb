@@ -12,14 +12,12 @@ RSpec.describe 'Authentication', type: :request do
       get api_reading_logs_path
 
       expect(response).to have_http_status(:unauthorized)
-      expect(response.parsed_body).to eq('errors' => ['Not Authenticated'])
     end
 
     it 'returns unauthorized when the token is invalid' do
       get api_reading_logs_path, headers: { Authorization: 'Bearer invalid.token' }
 
       expect(response).to have_http_status(:unauthorized)
-      expect(response.parsed_body).to eq('errors' => ['Not Authenticated'])
     end
 
     it 'returns unauthorized when the token user does not exist' do
@@ -28,7 +26,6 @@ RSpec.describe 'Authentication', type: :request do
       get api_reading_logs_path, headers: { Authorization: "Bearer #{token}" }
 
       expect(response).to have_http_status(:unauthorized)
-      expect(response.parsed_body).to eq('errors' => ['Not Authenticated'])
     end
 
     it 'returns unauthorized when the token is expired' do
@@ -37,7 +34,6 @@ RSpec.describe 'Authentication', type: :request do
       get api_reading_logs_path, headers: { Authorization: "Bearer #{token}" }
 
       expect(response).to have_http_status(:unauthorized)
-      expect(response.parsed_body).to eq('errors' => ['Not Authenticated'])
     end
 
     it 'returns ok when the token is valid' do

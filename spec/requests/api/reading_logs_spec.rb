@@ -31,7 +31,7 @@ RSpec.describe 'API::ReadingLogs', type: :request do
         new_memo = FactoryBot.create(:memo, heading: new_heading)
         params = { memo_id: new_memo.id }
         expect { post(api_reading_logs_path, params:) }.to change { ReadingLog.count }.by(1)
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:created)
       end
     end
 

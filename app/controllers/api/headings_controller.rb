@@ -6,9 +6,9 @@ module API
       user_book = current_user.user_books.find(params[:user_book_id])
       heading = Heading.new(user_book:, number: params[:number].to_i, title: '', memo_attributes: {})
       if heading.save
-        render json: HeadingResource.new(heading).serializable_hash
+        render json: HeadingResource.new(heading).serializable_hash, status: :created
       else
-        render json: { error: '章の追加に失敗しました。' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 
@@ -17,7 +17,7 @@ module API
       if heading.update(title: params[:title])
         head :ok
       else
-        render json: { error: '章の更新に失敗しました' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
   end

@@ -16,13 +16,13 @@ module API
 
     def create
       book = Book.find_or_create_by(book_params)
-      return render json: { error: '本の登録に失敗しました。' }, status: :unprocessable_entity unless book.persisted?
+      return head :unprocessable_entity unless book.persisted?
 
       user_book = UserBook.new(book:, user: current_user)
       if user_book.save_with_heading
-        head :ok
+        head :created
       else
-        render json: { error: '本の登録に失敗しました。' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 
@@ -31,7 +31,7 @@ module API
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
-        render json: [error: '本の並び替えに失敗しました。'], status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 
@@ -39,7 +39,7 @@ module API
       if @user_book.update(status: params[:status])
         head :ok
       else
-        render json: { error: '本の情報の更新に失敗しました。' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 
@@ -47,7 +47,7 @@ module API
       if @user_book.destroy
         head :no_content
       else
-        render json: { error: '本の削除に失敗しました。' }, status: :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 

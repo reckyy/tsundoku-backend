@@ -65,4 +65,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.include AuthorizationHelper
+
+  config.before(:each) { Prosopite.scan }
+  config.after(:each) { Prosopite.finish }
 end

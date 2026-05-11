@@ -7,8 +7,13 @@ RSpec.describe UserBooksResource, type: :resource do
     user = FactoryBot.create(:user)
     books = FactoryBot.create_list(:book, 3)
     books.each_with_index { |book, i| UserBook.create(user:, book:, status: i) }
-    user_books = user.user_books
-    categorized_user_books = CategorizedUserBooks.new(user_books.status_unread, user_books.status_reading, user_books.status_finished)
+    user_books = user.user_books.includes(:book)
+    grouped = user_books.group_by(&:status)
+    categorized_user_books = CategorizedUserBooks.new(
+      grouped['unread'] || [],
+      grouped['reading'] || [],
+      grouped['finished'] || []
+    )
     user_books_json = UserBooksResource.new(categorized_user_books).serializable_hash.to_json
     expected_user_books_json = {
       unread_books: [

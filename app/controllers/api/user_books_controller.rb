@@ -5,11 +5,12 @@ module API
     before_action :set_user_book, only: %i[update position destroy]
 
     def index
-      user_books = current_user.user_books
+      user_books = current_user.user_books.includes(:book).order(:position)
+      grouped = user_books.group_by(&:status)
       categorized_user_books = CategorizedUserBooks.new(
-        user_books.status_unread_ordered,
-        user_books.status_reading_ordered,
-        user_books.status_finished_ordered
+        grouped['unread'] || [],
+        grouped['reading'] || [],
+        grouped['finished'] || []
       )
       render json: UserBooksResource.new(categorized_user_books).serializable_hash
     end

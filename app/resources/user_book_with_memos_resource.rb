@@ -6,7 +6,7 @@ class UserBookWithMemosResource < BaseResource
 
   many :headings,
        proc { |headings|
-         headings.order(:id)
+         headings.sort_by(&:id)
        },
        resource: HeadingResource
 end

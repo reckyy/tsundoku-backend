@@ -21,6 +21,8 @@ group :development, :test do
 
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'pg_query'
+  gem 'prosopite'
   gem 'rspec-rails'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false

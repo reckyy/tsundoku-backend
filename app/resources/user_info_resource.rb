@@ -4,10 +4,11 @@ class UserInfoResource < BaseResource
   attributes :name
 
   attribute :user_books do
+    grouped = object.user_books.includes(:book).group_by(&:status)
     categorized_user_books = CategorizedUserBooks.new(
-      object.user_books.status_unread,
-      object.user_books.status_reading,
-      object.user_books.status_finished
+      grouped['unread'] || [],
+      grouped['reading'] || [],
+      grouped['finished'] || []
     )
     UserBooksResource.new(categorized_user_books).serializable_hash
   end

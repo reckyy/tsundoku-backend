@@ -11,7 +11,7 @@ gem 'jwt'
 gem 'pg'
 gem 'puma', '>= 6.4', '< 7'
 gem 'rack-cors'
-gem 'rails', '8.0.2'
+gem 'rails', '8.0.5'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do
@@ -19,6 +19,8 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows]
   gem 'dotenv-rails'
 
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'pg_query'

@@ -18,6 +18,23 @@ jobs:
       - name: Lint
         run: bundle exec rubocop
 
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.3
+          bundler-cache: true
+      - name: Scan Ruby code for security vulnerabilities (Brakeman)
+        run: bundle exec brakeman --no-pager
+      - name: Audit gem dependencies for known CVEs (bundler-audit)
+        run: |
+          bundle exec bundle-audit update
+          bundle exec bundle-audit check
+
   test:
     runs-on: ubuntu-latest
     services:

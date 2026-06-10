@@ -13,9 +13,10 @@ module API
     end
 
     def create
-      user = User.find_or_create_by(user_params)
+      user = User.find_or_initialize_by(email: @google_claims['email'])
+      user.assign_attributes(name: @google_claims['name'], avatar_url: @google_claims['picture'])
 
-      if user.persisted?
+      if user.save
         access_token_expires_at = JWT_EXPIRATION.from_now
         encoded_token = encode_jwt({ id: user.id, exp: access_token_expires_at.to_i })
 
@@ -38,10 +39,6 @@ module API
     end
 
     private
-
-    def user_params
-      params.permit(:name, :email, :avatar_url)
-    end
 
     def encode_jwt(payload)
       secret_key = ENV.fetch('SECRET_KEY_BASE')

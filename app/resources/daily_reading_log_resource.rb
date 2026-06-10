@@ -9,6 +9,7 @@ class DailyReadingLogResource < BaseResource
     else
       daily_counts = reading_logs
                      .group(:read_date)
+                     .order(:read_date)
                      .count
                      .transform_keys(&:to_date)
       logs_by_year = daily_counts.group_by { |date, _| date.year }

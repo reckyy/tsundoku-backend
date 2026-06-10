@@ -34,7 +34,7 @@ class ApplicationController < ActionController::API
     issuer = ENV.fetch('ISSUER')
 
     begin
-      Google::Auth::IDTokens.verify_oidc(params[:id_token], aud: audience, iss: issuer)
+      @google_claims = Google::Auth::IDTokens.verify_oidc(params[:id_token], aud: audience, iss: issuer)
     rescue Google::Auth::IDTokens::VerificationError
       head :unauthorized
     end

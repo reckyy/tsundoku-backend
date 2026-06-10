@@ -17,8 +17,8 @@ RSpec.describe 'API::Users', type: :request do
   describe 'API::UsersController#create' do
     context 'registering new user' do
       it 'returns a ok response' do
-        user_params = { name: 'hoge', email: Faker::Internet.email, avatar_url: Faker::Internet.url }
-        expect { post api_auth_callback_google_path, params: user_params }.to change { User.count }.by(1)
+        google_id_token_stub('email' => Faker::Internet.email, 'name' => 'hoge', 'picture' => Faker::Internet.url)
+        expect { post api_auth_callback_google_path, params: { id_token: 'id_token' } }.to change { User.count }.by(1)
         expect(response).to have_http_status(:ok)
         expect(response.parsed_body['access_token']).to be_present
         expect(response.parsed_body['access_token_expires_at']).to be_present
@@ -27,18 +27,37 @@ RSpec.describe 'API::Users', type: :request do
 
     context 'when a user logs in' do
       it 'returns a ok response' do
-        user_params = { name: current_user.name, email: current_user.email, avatar_url: current_user.avatar_url }
-        post api_auth_callback_google_path, params: user_params
+        expect { post api_auth_callback_google_path, params: { id_token: 'id_token' } }.not_to(change { User.count })
         expect(response).to have_http_status(:ok)
         expect(response.parsed_body['access_token']).to be_present
         expect(response.parsed_body['access_token_expires_at']).to be_present
       end
     end
 
-    context 'params is invalid' do
+    context 'when an existing user logs in with a changed name and avatar' do
+      it 'updates the profile without creating a new user' do
+        google_id_token_stub('email' => current_user.email, 'name' => 'new name', 'picture' => 'https://example.com/new-avatar.png')
+        expect { post api_auth_callback_google_path, params: { id_token: 'id_token' } }.not_to(change { User.count })
+        expect(response).to have_http_status(:ok)
+        expect(current_user.reload.name).to eq 'new name'
+        expect(current_user.avatar_url).to eq 'https://example.com/new-avatar.png'
+      end
+    end
+
+    context 'when the request body email differs from the token email' do
+      it 'identifies the user by the token email' do
+        user_params = { name: 'attacker', email: 'attacker@example.com', avatar_url: Faker::Internet.url, id_token: 'id_token' }
+        expect { post api_auth_callback_google_path, params: user_params }.not_to(change { User.count })
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['id']).to eq current_user.id
+        expect(User.exists?(email: 'attacker@example.com')).to be false
+      end
+    end
+
+    context 'when token claims lack an email' do
       it 'returns a bad response' do
-        user_params = { name: 'hoge', avatar_url: Faker::Internet.url }
-        post api_auth_callback_google_path, params: user_params
+        google_id_token_stub('email' => nil, 'name' => 'hoge', 'picture' => Faker::Internet.url)
+        post api_auth_callback_google_path, params: { id_token: 'id_token' }
         expect(response).to have_http_status(422)
       end
     end

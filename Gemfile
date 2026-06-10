@@ -9,7 +9,7 @@ gem 'bootsnap', require: false
 gem 'googleauth'
 gem 'jwt'
 gem 'pg'
-gem 'puma', '>= 6.4', '< 7'
+gem 'puma', '~> 7.2', '>= 7.2.1'
 gem 'rack-cors'
 gem 'rails', '8.0.5'
 gem 'tzinfo-data', platforms: %i[windows jruby]

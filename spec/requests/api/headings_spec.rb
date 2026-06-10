@@ -39,6 +39,14 @@ RSpec.describe 'API::Headings', type: :request do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context 'when number is invalid' do
+      it 'returns a bad response' do
+        params = { user_book_id: @user_book.id, number: 0 }
+        expect { post(api_headings_path, params:) }.not_to(change { Heading.count })
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 
   describe 'API::HeadingsController#update' do
@@ -57,7 +65,7 @@ RSpec.describe 'API::Headings', type: :request do
         allow_any_instance_of(Heading).to receive(:update).and_return(false)
         params = { id: @heading.id, title: '更新後のタイトル' }
         patch(api_heading_path(@heading.id), params:)
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 

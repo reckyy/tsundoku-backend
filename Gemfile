@@ -2,12 +2,13 @@
 
 source 'https://rubygems.org'
 
-ruby '3.4.3'
+ruby '4.0.5'
 gem 'acts_as_list'
 gem 'alba'
 gem 'bootsnap', require: false
 gem 'googleauth'
 gem 'jwt'
+gem 'ostruct'
 gem 'pg'
 gem 'puma', '~> 7.2', '>= 7.2.1'
 gem 'rack-cors'

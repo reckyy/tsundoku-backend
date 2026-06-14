@@ -44,7 +44,7 @@ RSpec.describe 'API::Headings', type: :request do
       it 'returns a bad response' do
         params = { user_book_id: @user_book.id, number: 0 }
         expect { post(api_headings_path, params:) }.not_to(change { Heading.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe 'API::Headings', type: :request do
         allow_any_instance_of(Heading).to receive(:update).and_return(false)
         params = { id: @heading.id, title: '更新後のタイトル' }
         patch(api_heading_path(@heading.id), params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 

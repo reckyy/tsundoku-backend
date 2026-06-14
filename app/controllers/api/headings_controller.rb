@@ -8,7 +8,7 @@ module API
       if heading.save
         render json: HeadingResource.new(heading).serializable_hash, status: :created
       else
-        head :unprocessable_entity
+        head :unprocessable_content
       end
     end
 
@@ -17,7 +17,7 @@ module API
       if heading.update(title: params[:title])
         head :ok
       else
-        head :unprocessable_entity
+        head :unprocessable_content
       end
     end
   end

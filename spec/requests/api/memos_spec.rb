@@ -40,7 +40,7 @@ RSpec.describe 'API::Memos', type: :request do
         allow_any_instance_of(Memo).to receive(:update).and_return(false)
         params = { id: @memo.id, body: '更新後のメモ' }
         patch(api_memo_path(@memo.id), params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 

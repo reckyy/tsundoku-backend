@@ -14,7 +14,7 @@ module API
       if memo.update(body: params[:body])
         head :ok
       else
-        head :unprocessable_entity
+        head :unprocessable_content
       end
     end
   end

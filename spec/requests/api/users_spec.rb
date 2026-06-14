@@ -58,7 +58,7 @@ RSpec.describe 'API::Users', type: :request do
       it 'returns a bad response' do
         google_id_token_stub('email' => nil, 'name' => 'hoge', 'picture' => Faker::Internet.url)
         post api_auth_callback_google_path, params: { id_token: 'id_token' }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -85,7 +85,7 @@ RSpec.describe 'API::Users', type: :request do
       it 'return a bad response' do
         allow(current_user).to receive(:destroy).and_return(false)
         delete("/api/users/#{current_user.id}")
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

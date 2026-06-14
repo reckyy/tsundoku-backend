@@ -51,7 +51,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         expect { post(api_user_books_path, params:) }
           .to change { Book.count }.by(0)
           .and change { UserBook.count }.by(0)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         allow_any_instance_of(UserBook).to receive(:save_with_heading).and_return(false)
         params = { title: @book.title, author: @book.author, coverImageUrl: @book.cover_image_url }
         post(api_user_books_path, params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -83,7 +83,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         allow_any_instance_of(UserBook).to receive(:swap_positions_with).and_return(false)
         params = { user_book_id: @user_book.id, destination_book_id: second_user_book.id }
         patch(position_api_user_book_path(@user_book.id), params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -115,7 +115,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         allow_any_instance_of(UserBook).to receive(:update).and_return(false)
         params = { user_book_id: @user_book.id, status: 'reading' }
         patch(api_user_book_path(@user_book.id), params:)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -146,7 +146,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         allow_any_instance_of(UserBook).to receive(:destroy).and_return(false)
         params = { user_book_id: @user_book.id }
         expect { delete(api_user_book_path(@user_book.id), params:) }.not_to(change { UserBook.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 

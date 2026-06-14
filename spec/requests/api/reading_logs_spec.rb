@@ -54,5 +54,18 @@ RSpec.describe 'API::ReadingLogs', type: :request do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context 'when saving the reading log fails' do
+      it 'returns a bad response' do
+        new_heading = FactoryBot.create(:heading, user_book: @user_book)
+        new_memo = FactoryBot.create(:memo, heading: new_heading)
+        allow(ReadingLog).to receive(:find_or_create_by).and_return(ReadingLog.new)
+
+        params = { memo_id: new_memo.id }
+        post(api_reading_logs_path, params:)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 end

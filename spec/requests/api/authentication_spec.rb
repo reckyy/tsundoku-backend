@@ -44,4 +44,37 @@ RSpec.describe 'Authentication', type: :request do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe 'POST /api/auth/callback/google' do
+    let(:audience) { 'test-audience' }
+    let(:issuer) { 'https://accounts.google.com' }
+    let(:claims) { { 'email' => user.email, 'name' => user.name, 'picture' => user.avatar_url } }
+
+    before do
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with('AUDIENCE').and_return(audience)
+      allow(ENV).to receive(:fetch).with('ISSUER').and_return(issuer)
+    end
+
+    it 'returns ok when the Google ID token is verified' do
+      allow(Google::Auth::IDTokens).to receive(:verify_oidc)
+        .with('valid_token', aud: audience, iss: issuer)
+        .and_return(claims)
+
+      post api_auth_callback_google_path, params: { id_token: 'valid_token' }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['access_token']).to be_present
+    end
+
+    it 'returns unauthorized when the Google ID token verification fails' do
+      allow(Google::Auth::IDTokens).to receive(:verify_oidc)
+        .and_raise(Google::Auth::IDTokens::VerificationError)
+
+      expect { post api_auth_callback_google_path, params: { id_token: 'tampered_token' } }
+        .not_to(change { User.count })
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
 end

@@ -4,9 +4,5 @@ class UserBookWithMemosResource < BaseResource
   attributes :id, :status
   one :book, resource: BookResource
 
-  many :headings,
-       proc { |headings|
-         headings.sort_by(&:id)
-       },
-       resource: HeadingResource
+  many :ordered_headings, key: :headings, resource: HeadingResource
 end

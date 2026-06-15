@@ -35,4 +35,8 @@ class UserBook < ApplicationRecord
   rescue ActiveRecord::ActiveRecordError
     false
   end
+
+  def ordered_headings
+    headings.sort_by(&:id)
+  end
 end

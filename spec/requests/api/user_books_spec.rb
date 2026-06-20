@@ -52,6 +52,7 @@ RSpec.describe 'API::UserBooks', type: :request do
           .to change { Book.count }.by(0)
           .and change { UserBook.count }.by(0)
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
 
@@ -61,6 +62,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         params = { title: @book.title, author: @book.author, coverImageUrl: @book.cover_image_url }
         post(api_user_books_path, params:)
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
   end
@@ -84,6 +86,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         params = { user_book_id: @user_book.id, destination_book_id: second_user_book.id }
         patch(position_api_user_book_path(@user_book.id), params:)
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
 
@@ -116,6 +119,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         params = { user_book_id: @user_book.id, status: 'reading' }
         patch(api_user_book_path(@user_book.id), params:)
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
 
@@ -147,6 +151,7 @@ RSpec.describe 'API::UserBooks', type: :request do
         params = { user_book_id: @user_book.id }
         expect { delete(api_user_book_path(@user_book.id), params:) }.not_to(change { UserBook.count })
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
 

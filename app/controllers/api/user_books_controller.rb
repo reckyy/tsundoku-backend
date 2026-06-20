@@ -17,13 +17,13 @@ module API
 
     def create
       book = Book.find_or_create_by(book_params)
-      return head :unprocessable_content unless book.persisted?
+      return render_unprocessable(book) unless book.persisted?
 
       user_book = UserBook.new(book:, user: current_user)
       if user_book.save_with_heading
         head :created
       else
-        head :unprocessable_content
+        render_unprocessable(user_book)
       end
     end
 
@@ -32,7 +32,7 @@ module API
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
-        head :unprocessable_content
+        render_unprocessable
       end
     end
 
@@ -40,7 +40,7 @@ module API
       if @user_book.update(status: params[:status])
         head :ok
       else
-        head :unprocessable_content
+        render_unprocessable(@user_book)
       end
     end
 
@@ -48,7 +48,7 @@ module API
       if @user_book.destroy
         head :no_content
       else
-        head :unprocessable_content
+        render_unprocessable(@user_book)
       end
     end
 

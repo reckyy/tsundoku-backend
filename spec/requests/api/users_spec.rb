@@ -75,8 +75,13 @@ RSpec.describe 'API::Users', type: :request do
 
   describe 'API::UsersController#destroy' do
     context 'params is valid' do
-      it 'return a nocontent response' do
-        expect { delete("/api/users/#{current_user.id}") }.to change { User.count }.by(-1)
+      it 'return a nocontent response and cascades deletion to associated records' do
+        expect { delete("/api/users/#{current_user.id}") }
+          .to change { User.count }.by(-1)
+          .and change { UserBook.count }.by(-1)
+          .and change { Heading.count }.by(-1)
+          .and change { Memo.count }.by(-1)
+          .and change { ReadingLog.count }.by(-1)
         expect(response).to have_http_status(:no_content)
       end
     end

@@ -26,7 +26,7 @@ module API
           access_token_expires_at: access_token_expires_at.iso8601
         }
       else
-        head :unprocessable_content
+        render_unprocessable(user)
       end
     end
 
@@ -34,7 +34,7 @@ module API
       if current_user.destroy
         head :no_content
       else
-        head :unprocessable_content
+        render_unprocessable(current_user)
       end
     end
 

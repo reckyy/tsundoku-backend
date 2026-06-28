@@ -12,7 +12,7 @@ module API
       if reading_log.persisted?
         head :created
       else
-        head :unprocessable_content
+        render_unprocessable(reading_log)
       end
     end
   end

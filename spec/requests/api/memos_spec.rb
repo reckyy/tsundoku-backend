@@ -41,6 +41,7 @@ RSpec.describe 'API::Memos', type: :request do
         params = { id: @memo.id, body: '更新後のメモ' }
         patch(api_memo_path(@memo.id), params:)
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
 

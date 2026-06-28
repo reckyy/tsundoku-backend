@@ -29,6 +29,12 @@ class ApplicationController < ActionController::API
     head :unauthorized
   end
 
+  def render_unprocessable(record = nil)
+    messages = record&.errors&.full_messages
+    messages = ['Unprocessable entity'] if messages.blank?
+    render json: { error: messages }, status: :unprocessable_content
+  end
+
   def verify_google_id_token
     audience = ENV.fetch('AUDIENCE')
     issuer = ENV.fetch('ISSUER')

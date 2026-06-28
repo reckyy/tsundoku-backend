@@ -65,6 +65,7 @@ RSpec.describe 'API::ReadingLogs', type: :request do
         post(api_reading_logs_path, params:)
 
         expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
       end
     end
   end

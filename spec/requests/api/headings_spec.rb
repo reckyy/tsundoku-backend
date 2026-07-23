@@ -19,6 +19,7 @@ RSpec.describe 'API::Headings', type: :request do
         params = { user_book_id: @user_book.id, number: 2 }
         expect { post(api_headings_path, params:) }.to change { Heading.count }.by(1)
         expect(response).to have_http_status(:created)
+        expect(response.parsed_body.dig('memo', 'body')).to eq('')
       end
     end
 

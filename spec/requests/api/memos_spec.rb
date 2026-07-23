@@ -47,6 +47,18 @@ RSpec.describe 'API::Memos', type: :request do
       end
     end
 
+    context 'when body is nil' do
+      it 'returns an unprocessable response without updating the memo' do
+        original_body = @memo.body
+
+        patch(api_memo_path(@memo.id), params: { body: nil }, as: :json)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body['error']).to be_present
+        expect(@memo.reload.body).to eq(original_body)
+      end
+    end
+
     context 'when the memo belongs to another user' do
       it 'returns not found' do
         other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))

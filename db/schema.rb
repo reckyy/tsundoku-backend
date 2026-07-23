@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_28_113436) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_23_065041) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,7 +32,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_28_113436) do
   end
 
   create_table "memos", force: :cascade do |t|
-    t.text "body"
+    t.text "body", default: "", null: false
     t.bigint "heading_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

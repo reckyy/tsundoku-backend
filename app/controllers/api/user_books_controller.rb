@@ -32,7 +32,7 @@ module API
       if @user_book.swap_positions_with(destination_user_book)
         head :ok
       else
-        render_unprocessable
+        render_unprocessable(@user_book)
       end
     end
 

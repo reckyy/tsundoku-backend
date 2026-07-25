@@ -36,6 +36,36 @@ RSpec.describe UserBook, type: :model do
       expect(first_user_book.reload.position).to eq(1)
       expect(second_user_book.reload.position).to eq(2)
     end
+
+    it 'rejects swapping positions with a book in a different status' do
+      first_unread_user_book = UserBook.create(user: current_user, book: FactoryBot.create(:book))
+      second_unread_user_book = UserBook.create(user: current_user, book: FactoryBot.create(:book))
+      first_reading_user_book = UserBook.create(
+        user: current_user,
+        book: FactoryBot.create(:book),
+        status: :reading
+      )
+      second_reading_user_book = UserBook.create(
+        user: current_user,
+        book: FactoryBot.create(:book),
+        status: :reading
+      )
+      user_books = [
+        first_unread_user_book,
+        second_unread_user_book,
+        first_reading_user_book,
+        second_reading_user_book
+      ]
+      user_book_ids = user_books.map(&:id)
+      positions_before_swap = UserBook.where(id: user_book_ids).pluck(:id, :position).to_h
+
+      result = first_unread_user_book.swap_positions_with(second_reading_user_book)
+
+      expect(result).to eq(false)
+      expect(first_unread_user_book.errors.full_messages).to include('Books must have the same status')
+      expect(UserBook.where(id: user_book_ids).pluck(:id, :position).to_h)
+        .to eq(positions_before_swap)
+    end
   end
 
   describe '#save_with_heading' do

@@ -91,14 +91,61 @@ RSpec.describe 'API::UserBooks', type: :request do
       end
     end
 
-    context 'when the destination user_book belongs to another user' do
+    context 'when the destination user_book has a different status' do
+      it 'returns an error without changing either list' do
+        second_user_book
+        first_reading_user_book = UserBook.create(
+          user: current_user,
+          book: FactoryBot.create(:book),
+          status: :reading
+        )
+        second_reading_user_book = UserBook.create(
+          user: current_user,
+          book: FactoryBot.create(:book),
+          status: :reading
+        )
+        user_books = [
+          @user_book,
+          second_user_book,
+          first_reading_user_book,
+          second_reading_user_book
+        ]
+        user_book_ids = user_books.map(&:id)
+        positions_before_swap = UserBook.where(id: user_book_ids).pluck(:id, :position).to_h
+        params = { destination_book_id: second_reading_user_book.id }
+
+        patch(position_api_user_book_path(@user_book.id), params:)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body).to eq('error' => ['Books must have the same status'])
+        expect(UserBook.where(id: user_book_ids).pluck(:id, :position).to_h)
+          .to eq(positions_before_swap)
+      end
+    end
+
+    context 'when the destination user_book does not exist' do
       it 'returns not found' do
-        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
-        params = { user_book_id: @user_book.id, destination_book_id: other_user_book.id }
+        nonexistent_id = UserBook.maximum(:id).to_i + 1
+        params = { destination_book_id: nonexistent_id }
 
         patch(position_api_user_book_path(@user_book.id), params:)
 
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the destination user_book belongs to another user' do
+      it 'returns not found without changing either position' do
+        other_user_book = UserBook.create(user: other_user, book: FactoryBot.create(:book))
+        user_book_ids = [@user_book.id, other_user_book.id]
+        positions_before_swap = UserBook.where(id: user_book_ids).pluck(:id, :position).to_h
+        params = { destination_book_id: other_user_book.id }
+
+        patch(position_api_user_book_path(@user_book.id), params:)
+
+        expect(response).to have_http_status(:not_found)
+        expect(UserBook.where(id: user_book_ids).pluck(:id, :position).to_h)
+          .to eq(positions_before_swap)
       end
     end
   end

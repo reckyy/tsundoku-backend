@@ -12,6 +12,11 @@ class UserBook < ApplicationRecord
   acts_as_list scope: %i[user_id status]
 
   def swap_positions_with(item)
+    if status != item.status
+      errors.add(:base, 'Books must have the same status')
+      return false
+    end
+
     transaction do
       item_position = item.position
       item.set_list_position(position, true)
